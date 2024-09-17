@@ -1,15 +1,39 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from django.shortcuts import render
 from .models import Restaurant
 
 # Create your views here.
 def index(request):
     return HttpResponse("Hello, world.")
 
+# Views for /FoodApp/restaurants
 def restaurant_list(request):
-    # Query all restaurant objects
+
+    # Get query parameters from the request (user input)
+    name_query = request.GET.get('name', '')  # Get the search term for name
+    cuisine_query = request.GET.get('cuisine', '')  # Get the search term for cuisine
+    sort_by = request.GET.get('sort', 'rating_high_first')  # Default sort by rating
+
+    # Search capabilities
     restaurants = Restaurant.objects.all()
 
-    # Pass the data to the template
-    return render(request, 'restaurants.html', {'restaurants': restaurants})
+    # Search by name
+    if name_query:
+        restaurants = restaurants.filter(name__icontains=name_query)  # Search by name (case insensitive)
+
+    # search by cuisine
+    if cuisine_query:
+        restaurants = restaurants.filter(cuisine__icontains=cuisine_query)  # Search by cuisine (case insensitive)
+
+    # Sort restaurants by rating (high to low and low to high)
+    if sort_by == 'rating_high_first':
+        restaurants = restaurants.order_by('-rating')  # Sort by rating (highest first)
+    elif sort_by == 'rating_low_first':
+        restaurants = restaurants.order_by('rating')  # Sort by rating (lowest first)
+
+    return render(request, 'restaurants.html', {
+        'restaurants': restaurants,
+        'name_query': name_query,
+        'cuisine_query': cuisine_query,
+        'sort_by': sort_by
+    })
