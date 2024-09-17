@@ -1,15 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
     <title>Restaurants</title>
 </head>
 <body>
     <h1>Restaurant List</h1>
+
+    <!-- Search Functionality -->
+    <form method="GET">
+
+        <!-- Find restaurant by name -->
+        <label for="name">Search by Name:</label>
+        <input type="text" name="name" id="name" value="{{ name_query }}">
+
+        <!-- Find restaurant by cuisine -->
+        <label for="cuisine">Search by Cuisine:</label>
+        <input type="text" name="cuisine" id="cuisine" value="{{ cuisine_query }}">
+
+        <!-- Sort restaurant by ratings -->
+        <label for="sort">Sort by:</label>
+        <select name="sort" id="sort">
+            <option value="rating_high_first" {% if sort_by == 'rating_high_first' %}selected{% endif %}>Rating - High to Low</option>
+            <option value="rating_low_first" {% if sort_by == 'rating_low_first' %}selected{% endif %}>Rating - Low to High</option>
+        </select>
+
+        <button type="submit">Search</button>
+    </form>
+
+    <!-- Restaurant List -->
     <ul>
         {% for restaurant in restaurants %}
             <li>
-                <strong>{{ restaurant.name }}</strong> - {{ restaurant.cuisine.all|join:", " }} <br>
+                <strong>{{ restaurant.name }}</strong> - {{ restaurant.cuisine }} <br>
                 Location: {{ restaurant.location }} <br>
                 Rating: {{ restaurant.rating }}
             </li>
