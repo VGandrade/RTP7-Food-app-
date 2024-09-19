@@ -31,7 +31,7 @@ def restaurant_list(request):
     elif sort_by == 'rating_low_first':
         restaurants = restaurants.order_by('rating')  # Sort by rating (lowest first)
 
-    return render(request, 'restaurants.html', {
+    return render(request, 'map.html', {
         'restaurants': restaurants,
         'name_query': name_query,
         'cuisine_query': cuisine_query,

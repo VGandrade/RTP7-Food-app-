@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atlanta Food Finder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        /* Header Styling */
+        .header {
+            background-color: #f68c34;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        /* Hamburger Icon Styling */
+        .menu-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .menu-icon div {
+            width: 100%;
+            height: 4px;
+            background-color: black;
+        }
+        /* Dropdown Menu Styling */
+        .dropdown-menu {
+            display: none; /* Hidden by default */
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background-color: #f9f9f9;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            z-index: 1;
+            min-width: 150px;
+        }
+        .dropdown-menu a {
+            padding: 10px;
+            display: block;
+            text-decoration: none;
+            color: black;
+            font-size: 16px;
+        }
+        .dropdown-menu a:hover {
+            background-color: #ddd;
+        }
+        /* Toggle the dropdown menu */
+        .menu-icon.active + .dropdown-menu {
+            display: block;
+        }
+        /* Search Bar */
+        .search-container {
+            background-color: #f9f9f9;
+            padding: 10px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .search-container label {
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        .search-container input[type="text"] {
+            width: 400px;
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            outline: none;
+            font-size: 16px;
+        }
+        .search-container button {
+            background-color: #f68c34;
+            border: none;
+            padding: 10px;
+            margin-left: -40px;
+            cursor: pointer;
+            border-radius: 50%;
+            outline: none;
+        }
+        .search-container .dropdown {
+            margin-left: 10px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        /* Map Section */
+        .map-container {
+            width: 100%;
+            height: 500px;
+            background-image: url('https://via.placeholder.com/800x600'); /* Placeholder for map */
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+<body>
+    
+
+       <!-- Header Section -->
+       <div class="header">
+        Atlanta Food Finder
+        <div class="menu-icon" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <!-- Dropdown Menu -->
+        <div class="dropdown-menu">
+            <a href="#">Home</a>
+            <a href="#">Search</a>
+            <a href="#">About Us</a>
+            <a href="#">Contact</a>
+        </div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-container">
+        <form method="GET">
+
+            <!-- Find restaurant by name -->
+            <label for="name">Search by Name:</label>
+            <input type="text" name="name" id="name" value="{{ name_query }}">
+    
+            <!-- Find restaurant by cuisine -->
+            <label for="cuisine">Search by Cuisine:</label>
+            <input type="text" name="cuisine" id="cuisine" value="{{ cuisine_query }}">
+            <div>
+                <label for="sort">Sort by:</label>
+            <select name="sort" id="sort">
+                <option value="rating_high_first" {% if sort_by == 'rating_high_first' %}selected{% endif %}>Rating - High to Low</option>
+                <option value="rating_low_first" {% if sort_by == 'rating_low_first' %}selected{% endif %}>Rating - Low to High</option>
+            </select>
+            </div>
+           
+    
+            <button type="submit">Search</button>
+        </form>
+        <div class="dropdown">&#x25BC;</div>
+    </div>
+
+    <!-- Map Section -->
+    <div class="map-container">
+        <ul>
+            {% for restaurant in restaurants %}
+                <li>
+                    <strong>{{ restaurant.name }}</strong> <br>
+                    Cuisine: {{ restaurant.cuisine }} <br>
+                    Location: {{ restaurant.location }} <br>
+                    Rating: {{ restaurant.rating }} <br>
+                    Phone Number: {{ restaurant.phonenum }} <br>
+                    <a href="{{ restaurant.website }}" target="_blank">Website</a>
+                </li>
+            {% empty %}
+                <li>No restaurants found.</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD4oBoretFq5JNK1Zzo2gxk5rSedxmtjiw&loading=async&libraries=maps,marker&v=beta" defer>
+    </script>
+    <gmp-map center="33.7490,-84.3880" zoom="12" map-id="YOUR_GOOGLE_MAP_ID" style="height: 400px; width: 100%;"></gmp-map>
+    
+
+</body>
+</html>
