@@ -8,5 +8,14 @@
       <jdbc-url>jdbc:sqlite:C:\Users\iamra\OneDrive\Desktop\vsc\CS 2340\Projects\RTP7-Food-app-\Poject1\ourSite\db.sqlite3</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="Django default" uuid="bdce5ca4-aa7c-42cc-ba27-a0aee1a19b03">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <imported>true</imported>
+      <remarks>$PROJECT_DIR$/Poject1/ourSite/ourSite/settings.py</remarks>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/Poject1/ourSite/db.sqlite3</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
