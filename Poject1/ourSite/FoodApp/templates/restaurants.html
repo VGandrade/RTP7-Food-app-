@@ -31,9 +31,12 @@
     <ul>
         {% for restaurant in restaurants %}
             <li>
-                <strong>{{ restaurant.name }}</strong> - {{ restaurant.cuisine }} <br>
+                <strong>{{ restaurant.name }}</strong> <br>
+                Cuisine: {{ restaurant.cuisine }} <br>
                 Location: {{ restaurant.location }} <br>
-                Rating: {{ restaurant.rating }}
+                Rating: {{ restaurant.rating }} <br>
+                Phone Number: {{ restaurant.phonenum }} <br>
+                <a href="{{ restaurant.website }}" target="_blank">Website</a>
             </li>
         {% empty %}
             <li>No restaurants found.</li>
