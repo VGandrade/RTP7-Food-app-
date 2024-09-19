@@ -42,7 +42,7 @@ def restaurant_list(request):
 
 
 
-    #View for users
+    #View for userss
 
 
 def user_create(request):
