@@ -1,6 +1,8 @@
 from django.http import HttpResponse
-from django.shortcuts import render
-from .models import Restaurant
+from .models import Restaurant, User
+from django.shortcuts import render, redirect
+
+
 
 # Create your views here.
 def index(request):
@@ -37,3 +39,24 @@ def restaurant_list(request):
         'cuisine_query': cuisine_query,
         'sort_by': sort_by
     })
+
+
+
+    #View for users
+
+
+def user_create(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        password = request.POST.get('password')
+
+        # Basic validation, you can expand this as needed
+        if name and password:
+            User.objects.create(name=name, password=password)
+            return redirect('user_create')  # Redirect after successful form submission
+        else:
+            error_message = "All fields are required."
+            return render(request, 'user_form.html', {'error_message': error_message})
+
+    return render(request, 'user_form.html')
+
