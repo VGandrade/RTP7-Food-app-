@@ -1,0 +1,11 @@
+<h1>All Users</h1>
+
+<ul>
+    {% for user in users %}
+        <li>{{ user.username }}</li>
+    {% empty %}
+        <li>No users found.</li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'user_create' %}">Create New User</a>

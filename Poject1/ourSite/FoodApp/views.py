@@ -1,6 +1,8 @@
 from django.http import HttpResponse
 from .models import Restaurant, User
 from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 
 
 
@@ -47,16 +49,45 @@ def restaurant_list(request):
 
 def user_create(request):
     if request.method == 'POST':
-        name = request.POST.get('name')
+        username = request.POST.get('username')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
         password = request.POST.get('password')
 
         # Basic validation, you can expand this as needed
-        if name and password:
-            User.objects.create(name=name, password=password)
-            return redirect('user_create')  # Redirect after successful form submission
+        if username and password and first_name and last_name:
+            user = User.objects.create(username=username,first_name= first_name,last_name= last_name)
+            user.set_password(password)
+            user.save()
+
+            return redirect('login')  # Redirect after successful form submission
         else:
             error_message = "All fields are required."
             return render(request, 'user_form.html', {'error_message': error_message})
 
     return render(request, 'user_form.html')
+
+def user_list(request):
+    users = User.objects.all()
+    return render(request, 'user_list.html', {'users': users})
+
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        # Authenticate the user
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            # Login the user
+            login(request, user)
+            return redirect('user_list')  # Redirect to user list or another appropriate page
+        else:
+            error_message = "Invalid username or password."
+            return render(request, 'login.html', {'error_message': error_message})
+
+    return render(request, 'login.html')
+
 
