@@ -1,6 +1,10 @@
 <form method="post">
     {% csrf_token %}
 
+    {% if error_message %}
+        <p style="color: red;">{{ error_message }}</p>
+    {% endif %}
+
     <label for="username">Username:</label>
     <input type="text" id="username" name="username" required><br><br>
 
