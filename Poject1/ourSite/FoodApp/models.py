@@ -18,9 +18,15 @@ class Restaurant(models.Model):
         return f"{self.name} restaurant serving {self.cuisine} cuisine at {self.location} with rating {self.rating}"
 
 class User(models.Model):
-    name = models.CharField(max_length=70, unique=True)
-    password = models.CharField(max_length=50, default="password")
+    class User(models.Model):
+        username = models.CharField(max_length=70, default="Unknown username", unique=True)
+        first_name = models.CharField(max_length=70, default="Unknown first_name", unique=False)
+        last_name = models.CharField(max_length=70, default="Unknown last_name", unique=False)
+        password = models.CharField(max_length=50, default="password")
 
-    def __str__(self):
-        return self.name
+        def __str__(self):
+            return self.username
+
+
+
 
