@@ -7,8 +7,8 @@ from django.contrib.auth.models import User
 
 
 # Create your views here.
-def index(request):
-    return HttpResponse("Hello, world.")
+def landing_page(request):
+    return render(request, 'landing.html')
 
 # Views for /FoodApp/restaurants
 def restaurant_list(request):
@@ -64,6 +64,7 @@ def user_create(request):
             user = User.objects.create(username=username,first_name= first_name,last_name= last_name)
             user.set_password(password)
             user.save()
+
 
             return redirect('login')  # Redirect after successful form submission
         else:
