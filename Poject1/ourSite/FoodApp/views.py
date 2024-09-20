@@ -53,12 +53,18 @@ def user_create(request):
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
         password = request.POST.get('password')
+        if username and password and first_name and last_name:
+            # Check if the username already exists
+            if User.objects.filter(username=username).exists():
+                error_message = "Username already exists. Please choose a different one."
+                return render(request, 'user_form.html', {'error_message': error_message})
 
         # Basic validation, you can expand this as needed
         if username and password and first_name and last_name:
             user = User.objects.create(username=username,first_name= first_name,last_name= last_name)
             user.set_password(password)
             user.save()
+
 
             return redirect('login')  # Redirect after successful form submission
         else:
