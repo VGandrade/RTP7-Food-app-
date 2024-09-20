@@ -68,99 +68,16 @@ body {
 
 .dropdown-menu a {
             display: block; /* Makes the links stack vertically */
-            color: #f68c34; /* Link text color */
+            color: #000000; /* Link text color */
             text-decoration: none; /* Remove underline from links */
             padding: 10px; /* Add padding around the links */
         }
 
-/* Search and Restaurant Dropdown Container */
-.search-restaurant-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px;
-    margin-right: 50px;
-    background-color: #ffd58d;
-    box-sizing: border-box; /* Ensure padding is included in the width */
-}
-
-/* Search Container */
-.search-container {
-    display: flex;
-    align-items: center;
-    flex-grow: 1;
-}
-
-.search-container form {
-    display: flex;
-    align-items: center;
-    width: 40%;
-}
-
-.search-container label {
-    font-size: 16px;
-    margin-right: 10px;
-}
-
-.search-container input[type="text"],
-.search-container select {
-    flex-grow: 1; /* Allow input and select to grow and fill available space */
-    padding: 10px;
-    border-radius: 20px;
-    border: 1px solid #ccc;
-    outline: none;
-    font-size: 16px;
-    margin-right: 10px;
-}
-
-.search-container button {
-    background-color: #f68c34;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 50%;
-    outline: none;
-    margin-left: 10px;
-}
-
-/* Restaurant Dropdown Container */
-.restaurant-dropdown-container {
-    max-width: 1; /* Set a max-width to prevent overflow */
-    flex-shrink: 0;
-    margin-right: 1; /* Add margin to create space from the right edge */
-}
-
-/* Sort and Cuisine Dropdown Menu Styling */
-.triangle-dropdown {
-    position: relative; /* Set position relative to this container */
-    cursor: pointer;
-}
-
-.sort-dropdown {
-    display: none; /* Hidden by default */
-    position: absolute; /* Positioning is absolute to the parent */
-    top: 150px; /* Align with the top of the button */
-    background-color: #f9f9f9;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
-    z-index: 2;
-    max-width: 100%; /* Adjust width as needed */
-    padding: 10px;
-    margin-left: 10px; /* Optional: space between button and dropdown */
-}
 
 
 
-/* Restaurant List Styling */
-ul {
-    list-style-type: none;
-    padding: 10px;
-}
 
-li {
-    margin: 10px 0;
-    font-size: 18px;
-}
+
 
     </style>
 </head>
@@ -177,94 +94,15 @@ li {
         <!-- Dropdown Menu -->
         <div class="dropdown-menu">
             <a href="/FoodApp/">Home</a>
-            <a href="#">User</a>
+            <a href="/FoodApp/restaurants">Finder</a>
+            <a href="/FoodApp/login">User</a>
             <a href="/FoodApp/users/create/">Register</a>
         </div>
     </div>
 
-    <!-- Search and Restaurant Dropdown -->
-    <div class="search-restaurant-container">
-        <!-- Search Bar -->
-        <div class="search-container">
-            <form method="GET">
-                <!-- Find restaurant by name -->
-                <label for="name">Search by Name:</label>
-                <input type="text" name="name" id="name" value="{{ name_query }}" placeholder="Enter restaurant name">
-                <button type="submit">Search</button>
-            </form>
-            <div class="triangle-dropdown" onclick="toggleSortDropdown()">&#x25BC;</div> <!-- Dropdown trigger -->
-            <!-- Sort Dropdown Menu -->
-            <div class="sort-dropdown">
-                <form method="GET">
-                    <!-- Sort by Rating -->
-                    <select name="sort" id="sort">
-                        <option value="rating_high_first" {% if sort_by == 'rating_high_first' %}selected{% endif %}>Rating - High to Low</option>
-                        <option value="rating_low_first" {% if sort_by == 'rating_low_first' %}selected{% endif %}>Rating - Low to High</option>
-                    </select>
-        
-                    <!-- Search by Cuisine -->
-                    <select name="cuisine" id="cuisine">
-                        <option value="">All Cuisines</option> <!-- Option to view all cuisines -->
-                        <option value="italian" {% if cuisine_query == 'italian' %}selected{% endif %}>Italian</option>
-                        <option value="mexican" {% if cuisine_query == 'mexican' %}selected{% endif %}>Mexican</option>
-                        <option value="chinese" {% if cuisine_query == 'chinese' %}selected{% endif %}>Chinese</option>
-                        <option value="indian" {% if cuisine_query == 'indian' %}selected{% endif %}>Indian</option>
-                        <option value="japanese" {% if cuisine_query == 'japanese' %}selected{% endif %}>Japanese</option>
-                        <option value="thai" {% if cuisine_query == 'thai' %}selected{% endif %}>Thai</option>
-                        <option value="american" {% if cuisine_query == 'american' %}selected{% endif %}>American</option>
-                        <option value="mediterranean" {% if cuisine_query == 'mediterranean' %}selected{% endif %}>Mediterranean</option>
-                        <!-- Add more cuisines as needed -->
-                    </select>
-                    <button type="submit">Apply</button>
-                </form>
-            </div>
-        </div>
-        
-
-        <!-- Restaurant List -->
-        <div class="restaurant-dropdown-container">
-            <label for="restaurant">Select a Restaurant:</label>
-            <select id="restaurant" name="restaurant" onchange="showRestaurantDetails(this)">
-                <option value="" selected disabled>Select a restaurant</option>
-                {% for restaurant in restaurants %}
-                    <option value="{{ restaurant.name }}">
-                        {{ restaurant.name }} - {{ restaurant.cuisine }} (Rating: {{ restaurant.rating }})
-                    </option>
-                {% empty %}
-                    <option disabled>No restaurants found</option>
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-
-    <!-- Restaurant Details Display -->
-    <div id="restaurant-details" style="display: none; margin-top: 20px;">
-        <p><strong>Name:</strong> <span id="restaurant-name"></span></p>
-        <p><strong>Cuisine:</strong> <span id="restaurant-cuisine"></span></p>
-        <p><strong>Location:</strong> <span id="restaurant-location"></span></p>
-        <p><strong>Rating:</strong> <span id="restaurant-rating"></span></p>
-        <p><strong>Phone Number:</strong> <span id="restaurant-phone"></span></p>
-        <a id="restaurant-website" href="" target="_blank">Website</a>
-    </div>
-
-    <!-- Map Section -->
-    <div class="map-container" id="map">
-        <!-- Map will be displayed here -->
-    </div>
 
     <script>
         
-        // Example list of restaurant data (you'll use the data from the server)
-        const restaurantData = {
-            "Restaurant Name": {
-                "name": "Restaurant Name",
-                "cuisine": "Cuisine Type",
-                "location": "Location Address",
-                "rating": "4.5",
-                "phone": "123-456-7890",
-                "website": "http://example.com"
-            }
-        };
 
         function showRestaurantDetails(selectElement) {
             const selectedRestaurant = selectElement.value;
