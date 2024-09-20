@@ -7,8 +7,8 @@ from django.contrib.auth.models import User
 
 
 # Create your views here.
-def index(request):
-    return HttpResponse("Hello, world.")
+def landing_page(request):
+    return render(request, 'landing.html')
 
 # Views for /FoodApp/restaurants
 def restaurant_list(request):

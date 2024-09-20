@@ -5,126 +5,299 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atlanta Food Finder</title>
     <style>
-        /* Basic Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    font-family: "Modak", sans-serif; /* Add Comic Sans */
+}
+
+body {
+    overflow-x: hidden; /* Prevent horizontal scroll */
+    background-color: #ffd58d;
+}
+
+/* Header Styling */
+.header {
+    background-color: #f68c34;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 36px;
+    font-weight: bolder;
+    position: relative;
+}
+
+/* Hamburger Icon Styling */
+.menu-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 30px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.menu-icon div {
+    width: 30px; /* Match width with the container */
+    height: 3px; /* Height of each bar */
+    background-color: black; /* Bar color */
+    border-radius: 2px; /* Optional: adds rounded corners */
+}
+
+/* Dropdown Menu Styling */
+.dropdown-menu {
+    display: none; /* Hidden by default */
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    font-size: 16px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    z-index: 1;
+    min-width: 200px;
+    padding: 10px;
+    background-color: #f68c34;
+}
+
+.dropdown-menu a {
+            display: block; /* Makes the links stack vertically */
+            color: #f68c34; /* Link text color */
+            text-decoration: none; /* Remove underline from links */
+            padding: 10px; /* Add padding around the links */
         }
 
-        body, html {
-            font-family: 'Oswald', sans-serif;
-            background-color: #f4f4f4;
-            color: white;
-        }
+/* Search and Restaurant Dropdown Container */
+.search-restaurant-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    margin-right: 50px;
+    background-color: #ffd58d;
+    box-sizing: border-box; /* Ensure padding is included in the width */
+}
 
-        /* Header Section */
-        .header {
-            background-color: white;
-            padding: 10px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+/* Search Container */
+.search-container {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+}
 
-        .header .logo {
-            width: 50px;
-            height: 50px;
-        }
+.search-container form {
+    display: flex;
+    align-items: center;
+    width: 40%;
+}
 
-        .header .title {
-            font-size: 36px;
-            font-weight: bold;
-            color: #f68c34;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-        }
+.search-container label {
+    font-size: 16px;
+    margin-right: 10px;
+}
 
-        .header .sign-in-btn {
-            background-color: #f68c34;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-        }
+.search-container input[type="text"],
+.search-container select {
+    flex-grow: 1; /* Allow input and select to grow and fill available space */
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 16px;
+    margin-right: 10px;
+}
 
-        .header .menu-icon {
-            width: 40px;
-            cursor: pointer;
-        }
+.search-container button {
+    background-color: #f68c34;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 50%;
+    outline: none;
+    margin-left: 10px;
+}
 
-        /* Main Section */
-        .main-section {
-            position: relative;
-            width: 100%;
-            height: 90vh;
-            background-image: url('landingpage.jpg');
-            background-size: cover;
-            background-position: center;
-        }
+/* Restaurant Dropdown Container */
+.restaurant-dropdown-container {
+    max-width: 1; /* Set a max-width to prevent overflow */
+    flex-shrink: 0;
+    margin-right: 1; /* Add margin to create space from the right edge */
+}
 
-        .main-section .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(246, 140, 52, 0.85);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
+/* Sort and Cuisine Dropdown Menu Styling */
+.triangle-dropdown {
+    position: relative; /* Set position relative to this container */
+    cursor: pointer;
+}
 
-        .main-section .overlay h1 {
-            font-size: 60px;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            margin-bottom: 20px;
-        }
+.sort-dropdown {
+    display: none; /* Hidden by default */
+    position: absolute; /* Positioning is absolute to the parent */
+    top: 150px; /* Align with the top of the button */
+    background-color: #f9f9f9;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    z-index: 2;
+    max-width: 100%; /* Adjust width as needed */
+    padding: 10px;
+    margin-left: 10px; /* Optional: space between button and dropdown */
+}
 
-        .main-section .overlay h2 {
-            font-size: 48px;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .header .title {
-                font-size: 28px;
-            }
 
-            .main-section .overlay h1 {
-                font-size: 40px;
-            }
+/* Restaurant List Styling */
+ul {
+    list-style-type: none;
+    padding: 10px;
+}
 
-            .main-section .overlay h2 {
-                font-size: 32px;
-            }
-        }
+li {
+    margin: 10px 0;
+    font-size: 18px;
+}
+
     </style>
 </head>
 <body>
-
-    <!-- Header -->
+    
+    <!-- Header Section -->
     <div class="header">
-        <img src="peach_logo.png" alt="Peach Logo" class="logo">
-        <div class="title">Atlanta Food Finder</div>
-        <button class="sign-in-btn">Sign In</button>
-        <img src="hamburger_icon.png" alt="Menu Icon" class="menu-icon">
-    </div>
-
-    <!-- Main Section with Overlay -->
-    <div class="main-section">
-        <div class="overlay">
-            <h1>Welcome To</h1>
-            <h2>Atlanta Food Finder</h2>
+        Atlanta Food Finder
+        <div class="menu-icon" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <!-- Dropdown Menu -->
+        <div class="dropdown-menu">
+            <a href="/FoodApp/">Home</a>
+            <a href="#">User</a>
+            <a href="/FoodApp/users/create/">Register</a>
         </div>
     </div>
 
+    <!-- Search and Restaurant Dropdown -->
+    <div class="search-restaurant-container">
+        <!-- Search Bar -->
+        <div class="search-container">
+            <form method="GET">
+                <!-- Find restaurant by name -->
+                <label for="name">Search by Name:</label>
+                <input type="text" name="name" id="name" value="{{ name_query }}" placeholder="Enter restaurant name">
+                <button type="submit">Search</button>
+            </form>
+            <div class="triangle-dropdown" onclick="toggleSortDropdown()">&#x25BC;</div> <!-- Dropdown trigger -->
+            <!-- Sort Dropdown Menu -->
+            <div class="sort-dropdown">
+                <form method="GET">
+                    <!-- Sort by Rating -->
+                    <select name="sort" id="sort">
+                        <option value="rating_high_first" {% if sort_by == 'rating_high_first' %}selected{% endif %}>Rating - High to Low</option>
+                        <option value="rating_low_first" {% if sort_by == 'rating_low_first' %}selected{% endif %}>Rating - Low to High</option>
+                    </select>
+        
+                    <!-- Search by Cuisine -->
+                    <select name="cuisine" id="cuisine">
+                        <option value="">All Cuisines</option> <!-- Option to view all cuisines -->
+                        <option value="italian" {% if cuisine_query == 'italian' %}selected{% endif %}>Italian</option>
+                        <option value="mexican" {% if cuisine_query == 'mexican' %}selected{% endif %}>Mexican</option>
+                        <option value="chinese" {% if cuisine_query == 'chinese' %}selected{% endif %}>Chinese</option>
+                        <option value="indian" {% if cuisine_query == 'indian' %}selected{% endif %}>Indian</option>
+                        <option value="japanese" {% if cuisine_query == 'japanese' %}selected{% endif %}>Japanese</option>
+                        <option value="thai" {% if cuisine_query == 'thai' %}selected{% endif %}>Thai</option>
+                        <option value="american" {% if cuisine_query == 'american' %}selected{% endif %}>American</option>
+                        <option value="mediterranean" {% if cuisine_query == 'mediterranean' %}selected{% endif %}>Mediterranean</option>
+                        <!-- Add more cuisines as needed -->
+                    </select>
+                    <button type="submit">Apply</button>
+                </form>
+            </div>
+        </div>
+        
+
+        <!-- Restaurant List -->
+        <div class="restaurant-dropdown-container">
+            <label for="restaurant">Select a Restaurant:</label>
+            <select id="restaurant" name="restaurant" onchange="showRestaurantDetails(this)">
+                <option value="" selected disabled>Select a restaurant</option>
+                {% for restaurant in restaurants %}
+                    <option value="{{ restaurant.name }}">
+                        {{ restaurant.name }} - {{ restaurant.cuisine }} (Rating: {{ restaurant.rating }})
+                    </option>
+                {% empty %}
+                    <option disabled>No restaurants found</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <!-- Restaurant Details Display -->
+    <div id="restaurant-details" style="display: none; margin-top: 20px;">
+        <p><strong>Name:</strong> <span id="restaurant-name"></span></p>
+        <p><strong>Cuisine:</strong> <span id="restaurant-cuisine"></span></p>
+        <p><strong>Location:</strong> <span id="restaurant-location"></span></p>
+        <p><strong>Rating:</strong> <span id="restaurant-rating"></span></p>
+        <p><strong>Phone Number:</strong> <span id="restaurant-phone"></span></p>
+        <a id="restaurant-website" href="" target="_blank">Website</a>
+    </div>
+
+    <!-- Map Section -->
+    <div class="map-container" id="map">
+        <!-- Map will be displayed here -->
+    </div>
+
+    <script>
+        
+        // Example list of restaurant data (you'll use the data from the server)
+        const restaurantData = {
+            "Restaurant Name": {
+                "name": "Restaurant Name",
+                "cuisine": "Cuisine Type",
+                "location": "Location Address",
+                "rating": "4.5",
+                "phone": "123-456-7890",
+                "website": "http://example.com"
+            }
+        };
+
+        function showRestaurantDetails(selectElement) {
+            const selectedRestaurant = selectElement.value;
+
+            if (restaurantData[selectedRestaurant]) {
+                const details = restaurantData[selectedRestaurant];
+                document.getElementById('restaurant-name').textContent = details.name;
+                document.getElementById('restaurant-cuisine').textContent = details.cuisine;
+                document.getElementById('restaurant-location').textContent = details.location;
+                document.getElementById('restaurant-rating').textContent = details.rating;
+                document.getElementById('restaurant-phone').textContent = details.phone;
+                document.getElementById('restaurant-website').href = details.website;
+                document.getElementById('restaurant-website').textContent = "Website";
+
+                // Show the details section
+                document.getElementById('restaurant-details').style.display = 'block';
+            }
+        }
+
+
+        function toggleMenu() {
+            const menuIcon = document.querySelector('.menu-icon');
+            const dropdownMenu = document.querySelector('.dropdown-menu');
+            menuIcon.classList.toggle('active');
+            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function toggleSortDropdown() {
+            console.log("Toggle dropdown clicked");
+            const sortDropdown = document.querySelector('.sort-dropdown');
+            sortDropdown.style.display = sortDropdown.style.display === 'block' ? 'none' : 'block';
+        }
+
+    </script>
 </body>
 </html>
