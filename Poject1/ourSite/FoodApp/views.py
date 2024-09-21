@@ -57,7 +57,7 @@ def user_create(request):
             # Check if the username already exists
             if User.objects.filter(username=username).exists():
                 error_message = "Username already exists. Please choose a different one."
-                return render(request, 'user_form.html', {'error_message': error_message})
+                return render(request, 'user_form_test.html', {'error_message': error_message})
 
         # Basic validation, you can expand this as needed
         if username and password and first_name and last_name:
@@ -69,9 +69,9 @@ def user_create(request):
             return redirect('login')  # Redirect after successful form submission
         else:
             error_message = "All fields are required."
-            return render(request, 'user_form.html', {'error_message': error_message})
+            return render(request, 'user_form_test.html', {'error_message': error_message})
 
-    return render(request, 'user_form.html')
+    return render(request, 'user_form_test.html')
 
 def user_list(request):
     users = User.objects.all()
