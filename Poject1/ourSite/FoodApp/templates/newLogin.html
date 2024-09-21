@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,8 +25,8 @@
             position: fixed;
             background-color: white;
             padding: 100px 50px;
-            border-color: black;
-            border-radius: 50px;
+            border-radius: 30px;
+            border: 5px solid black;
             text-align: center;
         }
 
@@ -143,11 +144,25 @@
         a {
             color: blue;
         }
+        
+        {#.logo div {#}
+        {#    width: 70px;#}
+        {#    height: 70px;#}
+        {#    border-radius: 50%; /* Make it a circle */#}
+        {#    background-image: url("{% static 'FoodApp/logo.jpg' %}");#}
+        {#    background-position: center;#}
+        {#    background-size: contain;#}
+        {#    background-repeat: no-repeat; /* Ensure no repeat */#}
+        {#    border: 5px solid black; /* Add border around the image */#}
+        {#}#}
 
     </style>
 </head>
 <body>
     <div class="header">
+{#        <div class="logo">#}
+{#            <div></div>#}
+{#        </div>#}
         <h2>Atlanta Food Finder</h2>
         <div class="menu-icon" onclick="toggleMenu()">
             <div></div>

@@ -51,7 +51,7 @@ body {
         /* Hamburger Icon Styling */
         .menu-icon {
             position: absolute;
-            top: 20px;
+            top: 30px;
             right: 20px;
             width: 40px;
             height: 30px;
@@ -63,7 +63,7 @@ body {
 
         .menu-icon div {
             width: 40px;
-            height: 6px;
+            height: 8px;
             background-color: black;
             border-radius: 2px;
         }
@@ -95,6 +95,25 @@ body {
             text-decoration: none;
             padding: 5px;
         }
+        .logo {
+            position: absolute;
+            z-index: 2;
+            top: 7.5px;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .logo div {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%; /* Make it a circle */
+    background-image: url("{% static 'FoodApp/logo.jpg' %}");
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat; /* Ensure no repeat */
+    border: 5px solid black; /* Add border around the image */
+}
 
     </style>
 </head>
@@ -102,7 +121,9 @@ body {
     
     <!-- Header Section -->
     <div class="header">
-
+        <div class="logo">
+            <div></div>
+        </div>
         Atlanta Food Finder
         <div class="menu-icon" onclick="toggleMenu()">
             <div></div>
@@ -113,7 +134,7 @@ body {
         <div class="dropdown-menu">
             <a href="/FoodApp/">Home</a>
             <a href="/FoodApp/restaurants">Finder</a>
-            <a href="/FoodApp/login">Login</a>
+            <a href="/FoodApp/login">Log In</a>
             <a href="/FoodApp/users/create/">Register</a>
         </div>
     </div>

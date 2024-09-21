@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atlanta Food Finder</title>
     <link href="https://fonts.googleapis.com/css2?family=Modak:wght@400;700&display=swap" rel="stylesheet">
+    {% load static %}
     <style>
         html, body {
     height: 100%;
@@ -104,11 +105,11 @@ body {
 .search-container form {
     display: flex;
     align-items: center;
-    width: 40%;
+    width: 50%;
 }
 
 .search-container label {
-    font-size: 16px;
+    font-size: 18px;
     margin-right: 10px;
 }
 
@@ -119,7 +120,7 @@ body {
     border-radius: 20px;
     border: 1px solid #ccc;
     outline: none;
-    font-size: 16px;
+    font-size: 18px;
     margin-right: 10px;
 }
 
@@ -138,6 +139,7 @@ body {
 .restaurant-dropdown-container {
     max-width: 1; /* Set a max-width to prevent overflow */
     flex-shrink: 0;
+    font-size: 18px;
     margin-right: 1; /* Add margin to create space from the right edge */
 }
 
@@ -181,6 +183,25 @@ li {
     margin: 10px 0;
     font-size: 18px;
 }
+.logo {
+            position: absolute;
+            z-index: 2;
+            top: 7.5px;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .logo div {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%; /* Make it a circle */
+    background-image: url("{% static 'FoodApp/logo.jpg' %}");
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat; /* Ensure no repeat */
+    border: 5px solid black; /* Add border around the image */
+}
 
     </style>
 </head>
@@ -188,6 +209,9 @@ li {
     
     <!-- Header Section -->
     <div class="header">
+        <div class="logo">
+            <div></div>
+        </div>
         Atlanta Food Finder
         <div class="menu-icon" onclick="toggleMenu()">
             <div></div>
