@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atlanta Food Finder - Login</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Modak, sans-serif;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: rgba(255, 165, 0, 0.8); /* Semi-transparent orange background */
+        }
+
+        .login-box {
+            position: fixed;
+            background-color: white;
+            padding: 100px 50px;
+            border-color: black;
+            border-radius: 50px;
+            text-align: center;
+        }
+
+        .login-box h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .login-box input[type="text"],
+        .login-box input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid black;
+            border-radius: 5px;
+        }
+
+        .login-box input[type="submit"] {
+            padding: 10px 20px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .login-box input[type="submit"]:hover {
+            background-color: darkred;
+        }
+
+        .login-box button.create-user {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            background-color: orange;
+            border-color: black;
+            border-radius: 25px;
+        }
+
+        .login-box button.create-user:hover {
+            background-color: darkorange;
+        }
+
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background-color: white;
+            text-align: center;
+        }
+
+        .header h2 {
+            display: inline;
+            font-size: 36px;
+            color: orange;
+        }
+
+        /* Hamburger Icon Styling */
+        .menu-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .menu-icon div {
+            width: 40px;
+            height: 6px;
+            background-color: black;
+            border-radius: 2px;
+        }
+
+        /* Dropdown Menu Styling */
+        .dropdown-menu {
+            display: none; /* Hidden by default */
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            font-size: 16px;
+            text-shadow: none;
+            border-radius: 5px;
+            z-index: 2;
+            min-width: 200px;
+            padding: 5px;
+            border: 2px solid black;
+            background-color: #f68c34;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            color: black;
+            font-size: 24px;
+            text-shadow: none;
+            font-family: 'Times New Roman', Times, serif;
+            text-decoration: none;
+            padding: 5px;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: lightgray;
+        }
+
+        .error-message {
+            color: red;
+            margin-bottom: 10px;
+        }
+
+        a {
+            color: blue;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Atlanta Food Finder</h2>
+        <div class="menu-icon" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+
+        <!-- Dropdown Menu -->
+        <div class="dropdown-menu">
+            <a href="/FoodApp/">Home</a>
+            <a href="/FoodApp/restaurants">Finder</a>
+            <a href="/FoodApp/login">Login</a>
+            <a href="/FoodApp/users/create/">Register</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="login-box">
+            <h1>Sign In</h1>
+
+            <!-- Display error message if it exists -->
+            {% if error_message %}
+                <p class="error-message">{{ error_message }}</p>
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+                <div>
+                    <input type="text" id="username" name="username" placeholder="Username" required>
+                </div>
+                <div>
+                    <input type="password" id="password" name="password" placeholder="Password" required>
+                </div>
+
+                <div>
+                    <input type="submit" value="Sign in">
+                </div>
+            </form>
+
+            <p>Don't have an account? <a href="{% url 'user_create' %}">Create one here</a>.</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const menuIcon = document.querySelector('.menu-icon');
+            const dropdownMenu = document.querySelector('.dropdown-menu');
+            menuIcon.classList.toggle('active');
+            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+        }
+    </script>
+</body>
+</html>
+

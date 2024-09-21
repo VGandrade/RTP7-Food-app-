@@ -92,8 +92,8 @@ def login_view(request):
             return redirect('user_list')  # Redirect to user list or another appropriate page
         else:
             error_message = "Invalid username or password."
-            return render(request, 'login.html', {'error_message': error_message})
+            return render(request, 'newLogin.html', {'error_message': error_message})
 
-    return render(request, 'login.html')
+    return render(request, 'newLogin.html')
 
 
