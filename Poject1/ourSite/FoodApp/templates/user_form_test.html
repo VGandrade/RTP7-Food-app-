@@ -3,88 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atlanta Food Finder - Login</title>
+    <title>Atlanta Food Finder - Create Account</title>
     <style>
         body {
             margin: 0;
-            font-family: Modak, sans-serif;
-            background-size: cover;
-            background-position: center;
-        }
-
-        .container {
+            font-family: Arial, sans-serif;
+            background-color: #f68c34; /* Orange background */
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start; /* Align items from the top */
             height: 100vh;
-            background-color: #f68c34;
         }
 
-        .login-box {
-            position: fixed;
-            background-color: white;
-            padding: 100px 50px;
-            border-color: black;
-            border-radius: 50px;
-            text-align: center;
-        }
-
-        .login-box h1 {
-            font-size: 32px;
-            margin-bottom: 20px;
-        }
-
-        .login-box input[type="text"],
-        .login-box input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 2px solid black;
-            border-radius: 5px;
-        }
-
-        .login-box input[type="submit"] {
-            padding: 10px 20px;
-            background-color: red;
-            color: white;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 18px;
-        }
-
-        .login-box input[type="submit"]:hover {
-            background-color: darkred;
-        }
-
-        .login-box button.create-user {
-            margin-top: 20px;
-            margin-bottom: 10px;
-            background-color: orange;
-            border-color: black;
-            border-radius: 25px;
-        }
-
-        .login-box button.create-user:hover {
-            background-color: darkorange;
-        }
-
+        /* Header Styling */
         .header {
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            padding: 20px;
             background-color: white;
             text-align: center;
+            padding: 20px;
         }
 
-        .header h2 {
-            display: inline;
+        .header h1 {
+            font-size: 48px;
+            color: #f68c34;
+            margin: 0;
+            font-family: 'Modak', sans-serif;
+        }
+
+        .container {
+            background-color: white;
+            width: 400px;
+            padding: 30px 40px;
+            border-radius: 30px;
+            border: 5px solid black;
+            text-align: center;
+            margin-top: 150px; /* Add margin to create space from the top */
+        }
+
+        .container h2 {
             font-size: 36px;
-            color: orange;
+            margin-bottom: 20px;
+            color: black;
+            font-family: 'Modak', sans-serif;
         }
 
+        .container input[type="text"],
+        .container input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid black;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+
+        .container input[type="submit"],
+        .container button {
+            background-color: red;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .container input[type="submit"]:hover,
+        .container button:hover {
+            background-color: darkred;
+        }
         /* Hamburger Icon Styling */
         .menu-icon {
             position: absolute;
@@ -135,20 +126,20 @@
             background-color: lightgray;
         }
 
+        /* Error message styling */
         .error-message {
             color: red;
+            font-weight: bold;
             margin-bottom: 10px;
-        }
-
-        a {
-            color: blue;
         }
 
     </style>
 </head>
 <body>
+
+    <!-- Header Section -->
     <div class="header">
-        <h2>Atlanta Food Finder</h2>
+        <h1>Atlanta Food Finder</h1>
         <div class="menu-icon" onclick="toggleMenu()">
             <div></div>
             <div></div>
@@ -164,31 +155,45 @@
         </div>
     </div>
 
+    <!-- Create Account Form -->
     <div class="container">
-        <div class="login-box">
-            <h1>Sign In</h1>
+        <h2>Create Account</h2>
 
-            <!-- Display error message if it exists -->
+        <form method="post">
+            {% csrf_token %}
+
+            <!-- Display error message if present -->
             {% if error_message %}
                 <p class="error-message">{{ error_message }}</p>
             {% endif %}
 
-            <form method="POST">
-                {% csrf_token %}
-                <div>
-                    <input type="text" id="username" name="username" placeholder="Username" required>
-                </div>
-                <div>
-                    <input type="password" id="password" name="password" placeholder="Password" required>
-                </div>
+            <!-- Username input -->
+            <div>
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
 
-                <div>
-                    <input type="submit" value="Sign in">
-                </div>
-            </form>
+            <!-- First Name input -->
+            <div>
+                <label for="first_name">First Name</label>
+                <input type="text" id="first_name" name="first_name" required>
+            </div>
 
-            <p>Don't have an account? <a href="{% url 'user_create' %}">Create one here</a>.</p>
-        </div>
+            <!-- Last Name input -->
+            <div>
+                <label for="last_name">Last Name</label>
+                <input type="text" id="last_name" name="last_name" required>
+            </div>
+
+            <!-- Password input -->
+            <div>
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <!-- Submit button -->
+            <button type="submit">Create User</button>
+        </form>
     </div>
 
     <script>
@@ -199,6 +204,6 @@
             dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
         }
     </script>
+
 </body>
 </html>
-
