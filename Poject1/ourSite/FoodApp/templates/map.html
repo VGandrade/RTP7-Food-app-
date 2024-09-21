@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atlanta Food Finder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Modak:wght@400;700&display=swap" rel="stylesheet">
     <style>
         html, body {
     height: 100%;
@@ -26,9 +27,12 @@ body {
     color: white;
     padding: 20px;
     text-align: center;
+    text-shadow: 5px #000000;
     font-size: 36px;
-    font-weight: bolder;
+    font-weight: normal;
     position: relative;
+    text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000;
+    -webkit-text-stroke: 1px black; /* For WebKit browsers */
 }
 
 /* Hamburger Icon Styling */
@@ -45,8 +49,8 @@ body {
 }
 
 .menu-icon div {
-    width: 30px; /* Match width with the container */
-    height: 3px; /* Height of each bar */
+    width: 40px; /* Match width with the container */
+    height: 6px; /* Height of each bar */
     background-color: black; /* Bar color */
     border-radius: 2px; /* Optional: adds rounded corners */
 }
@@ -58,20 +62,26 @@ body {
     top: 40px;
     right: 40px;
     font-size: 16px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    font-weight: lighter;
+    text-shadow: none;
     border-radius: 5px;
     z-index: 2;
     min-width: 200px;
-    padding: 10px;
+    padding: 5px;
+    border: 2px solid black; /* Adds a black border around the dropdown */
     background-color: #f68c34;
 }
 
 .dropdown-menu a {
-            display: block; /* Makes the links stack vertically */
-            color: #000000; /* Link text color */
-            text-decoration: none; /* Remove underline from links */
-            padding: 10px; /* Add padding around the links */
-        }
+        display: block; /* Makes the links stack vertically */
+        color: black; /* Link text color */
+        font-size: 24px;
+        text-shadow: none;
+        font-family: 'Times New Roman', Times, serif;
+        font-weight: lighter;
+        text-decoration: none; /* Remove underline from links */
+        padding: 5px; /* Add padding around the links */
+    }
 
 /* Search and Restaurant Dropdown Container */
 .search-restaurant-container {
@@ -118,6 +128,7 @@ body {
     border: none;
     padding: 10px;
     cursor: pointer;
+    font-family: "Modak", sans-serif; /* Add Comic Sans */
     border-radius: 50%;
     outline: none;
     margin-left: 10px;
@@ -186,7 +197,7 @@ li {
         <!-- Dropdown Menu -->
         <div class="dropdown-menu">
             <a href="/FoodApp/">Home</a>
-            <a href="#">User</a>
+            <a href="/FoodApp/users/">User</a>
             <a href="/FoodApp/users/create/">Register</a>
         </div>
     </div>
