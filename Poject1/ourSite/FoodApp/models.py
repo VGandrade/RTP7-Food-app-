@@ -23,9 +23,12 @@ class User(models.Model):
         first_name = models.CharField(max_length=70, default="Unknown first_name", unique=False)
         last_name = models.CharField(max_length=70, default="Unknown last_name", unique=False)
         password = models.CharField(max_length=50, default="password")
+        favorites = models.JSONField(default=list, blank =True)
 
         def __str__(self):
             return self.username
+
+
 
 
 
