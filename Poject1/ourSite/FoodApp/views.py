@@ -1,8 +1,9 @@
 from django.http import HttpResponse
 from .models import Restaurant, User
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,  get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+
 
 
 
@@ -97,3 +98,7 @@ def login_view(request):
     return render(request, 'newLogin.html')
 
 
+# View for user profile
+def user_profile(request, username):
+    user_profile = get_object_or_404(User, username=username)
+    return render(request, 'user_profile.html', {'user_profile': user_profile})
