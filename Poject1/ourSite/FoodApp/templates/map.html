@@ -223,6 +223,7 @@ li {
             <a href="/FoodApp/">Home</a>
             <a href="/FoodApp/users/">User</a>
             <a href="/FoodApp/users/create/">Register</a>
+            <a href="{% url 'user_profile' username=request.user.username %}">Profile</a>
         </div>
     </div>
 

@@ -1,22 +1,20 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atlanta Food Finder</title>
+    <title>{{ user_profile.username }}'s Profile</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        body, html {
             margin: 0;
             padding: 0;
-            background-color: #ffffff;
+            height: 100%;
+            font-family: Arial, sans-serif;
         }
-        .container {
-            width: 100%;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
+        /* Full-page map background */
+        body {
+            background-size: cover;
         }
         .header {
             background-color: #f47920;
@@ -25,99 +23,119 @@
             padding: 10px 0;
             font-size: 32px;
             font-weight: bold;
-        }
-        .form-container {
-            display: flex;
-            justify-content: space-between;
-            padding: 20px;
-            background-color: #f2f2f2;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .form-section {
-            width: 60%;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 8px;
-            font-size: 14px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-        .edit-button {
-            font-size: 12px;
-            padding: 5px;
-            background-color: #f47920;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        
-        .right-section {
-            width: 35%;
-            background-color: #ffe3c3;
-            padding: 20px;
-            border-radius: 10px;
-        }
-        .right-section h2 {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
         }
         .menu-icon {
             position: absolute;
             top: 20px;
             right: 20px;
+            width: 40px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .menu-icon div {
+            width: 40px;
+            height: 8px;
+            background-color: black;
+            border-radius: 2px;
+        }
+        /* Dropdown Menu Styling */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 20px;
+            font-size: 16px;
+            text-shadow: none;
+            border-radius: 5px;
+            z-index: 2;
+            min-width: 200px;
+            padding: 5px;
+            border: 2px solid black;
+            background-color: #f68c34;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            color: black;
+            font-size: 18px;
+            text-decoration: none;
+            padding: 5px;
+            font-weight: lighter;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #ffc299;
+        }
+
+        /* Profile card styling */
+        .profile-card {
+            background-color: white;
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            text-align: left;
+            position: relative;
+            z-index: 1;
+        }
+        .profile-card h1 {
+            font-size: 22px;
+            text-align: center;
+            color: #f47920;
+            font-weight: bold;
+        }
+        .profile-card p {
+            font-size: 16px;
+            margin: 10px 0;
+            color: #333;
+        }
+        .profile-card strong {
+            color: #000;
         }
     </style>
 </head>
 <body>
 
-    <div class="header">Atlanta Food Finder</div>
+    <!-- Header Section with Hamburger Menu -->
+    <div class="header">
+        Atlanta Food Finder
+        <div class="menu-icon" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
 
-    <div class="container">
-        <div class="form-container">
-            <div class="form-section">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username">
-                    <button class="edit-button">EDIT</button>
-                </div>
-                <div class="form-group">
-                    <label for="first-name">First Name</label>
-                    <input type="text" id="first-name">
-                    <button class="edit-button">EDIT</button>
-                </div>
-                <div class="form-group">
-                    <label for="last-name">Last Name</label>
-                    <input type="text" id="last-name">
-                    <button class="edit-button">EDIT</button>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password">
-                </div>
-            </div>
-            <div class="right-section">
-                <h2>Favorite Restaurants</h2>
-                <!-- Favorite restaurants list will go here -->
-            </div>
+        <!-- Dropdown Menu -->
+        <div class="dropdown-menu">
+            <a href="/FoodApp/">Home</a>
+            <a href="/FoodApp/restaurants">Finder</a>
+            <a href="/FoodApp/login">Log In</a>
+            <a href="/FoodApp/users/create/">Register</a>
         </div>
     </div>
 
-    <div class="menu-icon">
-        <!-- You can add a hamburger menu icon here -->
+    <!-- Profile Card -->
+    <div class="profile-card">
+        <h1>Profile of {{ user_profile.username }}</h1>
+        <p><strong>First Name:</strong> {{ user_profile.first_name }}</p>
+        <p><strong>Last Name:</strong> {{ user_profile.last_name }}</p>
+        <p><strong>Favorites:</strong> {{ user_profile.favorites }}</p>
     </div>
+
+    <script>
+        function toggleMenu() {
+            const dropdownMenu = document.querySelector('.dropdown-menu');
+            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+        }
+    </script>
 
 </body>
 </html>
+
+
