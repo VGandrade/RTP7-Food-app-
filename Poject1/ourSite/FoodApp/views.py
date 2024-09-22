@@ -1,8 +1,9 @@
 from django.http import HttpResponse
-from .models import Restaurant, User
+from .models import Restaurant, User, CustomPasswordResetForm
 from django.shortcuts import render, redirect,  get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+from django.contrib import messages
 
 
 
@@ -103,3 +104,35 @@ def login_view(request):
 def user_profile(request, username):
     user_profile = get_object_or_404(User, username=username)
     return render(request, 'user_profile.html', {'user_profile': user_profile})
+
+
+def custom_password_reset(request):
+    if request.method == 'POST':
+        form = CustomPasswordResetForm(request.POST)
+
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            new_password = form.cleaned_data['new_password']
+
+            try:
+                # Find the user with the given username, first name, and last name
+                user = User.objects.get(username=username, first_name=first_name, last_name=last_name)
+
+                # Update the user's password
+                user.set_password(new_password)
+                user.save()
+
+                # Provide feedback and redirect
+                messages.success(request, 'Password successfully reset. You can now log in with your new password.')
+                return redirect('login')  # Redirect to login page after password reset
+
+            except User.DoesNotExist:
+                # If the user does not exist, show an error
+                messages.error(request, 'No user found with the provided details.')
+
+    else:
+        form = CustomPasswordResetForm()
+
+    return render(request, 'custom_password_reset.html', {'form': form})
