@@ -90,7 +90,7 @@ def login_view(request):
         if user is not None:
             # Login the user
             login(request, user)
-            return redirect('user_list')  # Redirect to user list or another appropriate page
+            return redirect('restaurant_list')  # Redirect to user list or another appropriate page
         else:
             error_message = "Invalid username or password."
             return render(request, 'newLogin.html', {'error_message': error_message})
