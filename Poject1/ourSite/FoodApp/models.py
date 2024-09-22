@@ -1,4 +1,5 @@
 from django.db import models
+from django import forms
 
 
 # Create your models here.
@@ -27,6 +28,24 @@ class User(models.Model):
 
         def __str__(self):
             return self.username
+
+# this is the model that creates the password reset
+class CustomPasswordResetForm(forms.Form):
+    username = forms.CharField(max_length=150)
+    first_name = forms.CharField(max_length=30)
+    last_name = forms.CharField(max_length=30)
+    new_password = forms.CharField(widget=forms.PasswordInput())
+    confirm_password = forms.CharField(widget=forms.PasswordInput())
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_password = cleaned_data.get('new_password')
+        confirm_password = cleaned_data.get('confirm_password')
+
+        if new_password != confirm_password:
+            raise forms.ValidationError("Passwords do not match.")
+
+        return cleaned_data
 
 
 
