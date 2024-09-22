@@ -98,6 +98,7 @@ def login_view(request):
     return render(request, 'newLogin.html')
 
 
+
 # View for user profile
 def user_profile(request, username):
     user_profile = get_object_or_404(User, username=username)
