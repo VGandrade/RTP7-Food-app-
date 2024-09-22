@@ -1,127 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-   <title>Restaurants</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nearby Restaurants Search</title>
+    <style>
+        form {
+            font-family: cursive;
+        }
+        #name:hover {
+            filter: drop-shadow(1px 1px 10px rgb(209, 146, 18));
+        }
+    </style>
+    {% load static %}
+    <script src="{% static 'FoodApp/map.js' %}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD4oBoretFq5JNK1Zzo2gxk5rSedxmtjiw&loading=async&libraries=maps,marker&v=beta" defer></script>
 </head>
 <body>
-   <h1>Restaurant List</h1>
+    <h1>Nearby Restaurants Search</h1>
+
+    <form id="restaurantSearchForm">
+        <label for="name">Search by Name:</label>
+        <input type="text" name="name" id="name" required>
+
+        <button type="submit" id="searchButton">Search</button>
+    </form>
+
+    <ul id="restaurantList"></ul>
+     <gmp-map center="33.7490,-84.3880" zoom="12" style="height: 400px; width: 100%;"></gmp-map>
 
 
-   <!-- Search Functionality -->
-   <form method="GET" id="searchForm">
-
-
-       <!-- Find restaurant by name -->
-       <label for="name">Search by Name:</label>
-       <input type="text" name="name" id="name" value="{{ name_query }}">
-
-
-       <!-- Sort restaurant by ratings -->
-       <label for="sort">Sort by:</label>
-       <select name="sort" id="sort">
-           <option value="rating_high_first" {% if sort_by =='rating_high_first' %}selected{% endif %}>Rating - High to Low</option>
-           <option value="rating_low_first" {% if sort_by =='rating_low_first' %}selected{% endif %}>Rating - Low to High</option>
-       </select>
-
-
-       <button type="submit">Search</button>
-   </form>
-
-
-   <!-- Restaurant List -->
-   <ul id="restaurantList">
-       {% for restaurant in restaurants %}
-           <li>
-               <strong>{{ restaurant.name }}</strong> <br>
-               Location: {{ restaurant.location }} <br>
-               Rating: {{ restaurant.rating }} <br>
-               Phone Number: {{ restaurant.phonenum }} <br>
-               <a href="{{ restaurant.website }}" target="_blank">Website</a>
-           </li>
-       {% empty %}
-           <li>No restaurants found.</li>
-       {% endfor %}
-   </ul>
-
-
-   <!-- Google Maps -->
-   <script
-       src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_API_KEY&callback=initMap&libraries=places&v=weekly"
-       async
-       defer></script>
-
-
-   <div id="map" style="height: 400px; width: 100%;"></div>
-
-
-   <script>
-       let map;
-       let service;
-       let infowindow;
-
-
-       // Initialize the map centered at Atlanta
-       function initMap() {
-           const atlanta = new google.maps.LatLng(33.7490, -84.3880);
-
-
-           map = new google.maps.Map(document.getElementById("map"), {
-               center: atlanta,
-               zoom: 12,
-           });
-
-
-           // Get search input
-           const searchForm = document.getElementById('searchForm');
-           searchForm.addEventListener('submit', function (e) {
-               e.preventDefault();
-               const query = document.getElementById('name').value;
-               searchRestaurant(query);
-           });
-       }
-
-
-       // Search for restaurant by name
-       function searchRestaurant(query) {
-           const request = {
-               query: query + " Atlanta",
-               fields: ["name", "geometry"],
-           };
-
-
-           service = new google.maps.places.PlacesService(map);
-           service.findPlaceFromQuery(request, function (results, status) {
-               if (status === google.maps.places.PlacesServiceStatus.OK) {
-                   for (let i = 0; i < results.length; i++) {
-                       createMarker(results[i]);
-                   }
-
-
-                   // Center map to the first result
-                   map.setCenter(results[0].geometry.location);
-               } else {
-                   alert("No restaurants found.");
-               }
-           });
-       }
-
-
-       // Create a marker for the restaurant
-       function createMarker(place) {
-           if (!place.geometry || !place.geometry.location) return;
-
-
-           const marker = new google.maps.Marker({
-               map: map,
-               position: place.geometry.location,
-           });
-
-
-           google.maps.event.addListener(marker, "click", function () {
-               infowindow.setContent(place.name || "");
-               infowindow.open(map, marker);
-           });
-       }
-   </script>
 </body>
 </html>
