@@ -20,18 +20,18 @@ class Restaurant(models.Model):
 
 class User(models.Model):
     class User(models.Model):
-        username = models.CharField(max_length=70, default="Unknown username", unique=True)
+        usern = models.CharField(max_length=70, default="Unknown username", unique=True)
         first_name = models.CharField(max_length=70, default="Unknown first_name", unique=False)
         last_name = models.CharField(max_length=70, default="Unknown last_name", unique=False)
         password = models.CharField(max_length=50, default="password")
         favorites = models.JSONField(default=list, blank =True)
 
         def __str__(self):
-            return self.username
+            return self.usern
 
 # this is the model that creates the password reset
 class CustomPasswordResetForm(forms.Form):
-    username = forms.CharField(max_length=150)
+    usern = forms.CharField(max_length=150)
     first_name = forms.CharField(max_length=30)
     last_name = forms.CharField(max_length=30)
     new_password = forms.CharField(widget=forms.PasswordInput())

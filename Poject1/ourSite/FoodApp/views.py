@@ -51,7 +51,7 @@ def restaurant_list(request):
 
 def user_create(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
+        username = request.POST.get('usern')
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
         password = request.POST.get('password')
@@ -82,7 +82,7 @@ def user_list(request):
 
 def login_view(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
+        username = request.POST.get('usern')
         password = request.POST.get('password')
 
         # Authenticate the user
@@ -101,8 +101,8 @@ def login_view(request):
 
 
 # View for user profile
-def user_profile(request, username):
-    user_profile = get_object_or_404(User, username=username)
+def user_profile(request, usern):
+    user_profile = get_object_or_404(User, username=usern)
     return render(request, 'user_profile.html', {'user_profile': user_profile})
 
 
@@ -111,14 +111,14 @@ def custom_password_reset(request):
         form = CustomPasswordResetForm(request.POST)
 
         if form.is_valid():
-            username = form.cleaned_data['username']
+            username = form.cleaned_data['usern']
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
             new_password = form.cleaned_data['new_password']
 
             try:
                 # Find the user with the given username, first name, and last name
-                user = User.objects.get(username=username, first_name=first_name, last_name=last_name)
+                user = User.objects.get(username =username, first_name=first_name, last_name=last_name)
 
                 # Update the user's password
                 user.set_password(new_password)
