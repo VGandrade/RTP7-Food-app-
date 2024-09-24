@@ -234,7 +234,7 @@ li {
             <form method="GET" id="search-form">
                 <!-- Find restaurant by name -->
                 <label for="name">Search by Name:</label>
-                <input type="text" name="name" id="name" value="{{ name_query }}" placeholder="Enter restaurant name">
+                <input type="text" name="name" id="name" value="{{ name_query }}" placeholder="Enter restaurant or Cuisine">
                 <button type="submit">Search</button>
             </form>
             <div class="triangle-dropdown" onclick="toggleSortDropdown()">&#x25BC;</div> <!-- Dropdown trigger -->
@@ -248,17 +248,9 @@ li {
                     </select>
         
                     <!-- Search by Cuisine -->
-                    <select name="cuisine" id="cuisine">
-                        <option value="">All Cuisines</option> <!-- Option to view all cuisines -->
-                        <option value="italian" {% if cuisine_query == 'italian' %}selected{% endif %}>Italian</option>
-                        <option value="mexican" {% if cuisine_query == 'mexican' %}selected{% endif %}>Mexican</option>
-                        <option value="chinese" {% if cuisine_query == 'chinese' %}selected{% endif %}>Chinese</option>
-                        <option value="indian" {% if cuisine_query == 'indian' %}selected{% endif %}>Indian</option>
-                        <option value="japanese" {% if cuisine_query == 'japanese' %}selected{% endif %}>Japanese</option>
-                        <option value="thai" {% if cuisine_query == 'thai' %}selected{% endif %}>Thai</option>
-                        <option value="american" {% if cuisine_query == 'american' %}selected{% endif %}>American</option>
-                        <option value="mediterranean" {% if cuisine_query == 'mediterranean' %}selected{% endif %}>Mediterranean</option>
-                        <!-- Add more cuisines as needed -->
+                    <select name="distance" id="distance">
+                        <option value="close_to_far" {% if sort_by == 'close_to_far' %}selected{% endif %}>Distance - High to Low</option>
+                        <option value="far_to_close" {% if sort_by == 'far_to_close' %}selected{% endif %}>Distance - Low to High</option>
                     </select>
                     <button type="submit">Apply</button>
                 </form>
