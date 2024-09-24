@@ -231,7 +231,7 @@ li {
     <div class="search-restaurant-container">
         <!-- Search Bar -->
         <div class="search-container">
-            <form method="GET">
+            <form method="GET" id="search-form">
                 <!-- Find restaurant by name -->
                 <label for="name">Search by Name:</label>
                 <input type="text" name="name" id="name" value="{{ name_query }}" placeholder="Enter restaurant name">
@@ -298,51 +298,6 @@ li {
     </div>
 
     <script>
-        
-        // Example list of restaurant data (you'll use the data from the server)
-        const restaurantData = {
-            "Restaurant Name": {
-                "name": "Restaurant Name",
-                "cuisine": "Cuisine Type",
-                "location": "Location Address",
-                "rating": "4.5",
-                "phone": "123-456-7890",
-                "website": "http://example.com"
-            }
-        };
-
-        function showRestaurantDetails(selectElement) {
-            const selectedRestaurant = selectElement.value;
-
-            if (restaurantData[selectedRestaurant]) {
-                const details = restaurantData[selectedRestaurant];
-                document.getElementById('restaurant-name').textContent = details.name;
-                document.getElementById('restaurant-cuisine').textContent = details.cuisine;
-                document.getElementById('restaurant-location').textContent = details.location;
-                document.getElementById('restaurant-rating').textContent = details.rating;
-                document.getElementById('restaurant-phone').textContent = details.phone;
-                document.getElementById('restaurant-website').href = details.website;
-                document.getElementById('restaurant-website').textContent = "Website";
-
-                // Show the details section
-                document.getElementById('restaurant-details').style.display = 'block';
-            }
-        }
-
-        function initMap() {
-            // The location of Atlanta
-            const atlanta = { lat: 33.7490, lng: -84.3880 };
-            // The map, centered at Atlanta
-            const map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 12,
-                center: atlanta,
-            });
-            // The marker, positioned at Atlanta
-            const marker = new google.maps.Marker({
-                position: atlanta,
-                map: map,
-            });
-        }
 
         function toggleMenu() {
             const menuIcon = document.querySelector('.menu-icon');
@@ -361,9 +316,13 @@ li {
 
     <!-- Google Maps API -->
     <script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD4oBoretFq5JNK1Zzo2gxk5rSedxmtjiw&callback=initMap&libraries=places"
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD4oBoretFq5JNK1Zzo2gxk5rSedxmtjiw&map_id=8aad4cbbc9bfec3d&libraries=places&callback=initMap"
         async
         defer>
     </script>
+
+    <!-- Javascript -->
+   <script src="{% static 'FoodApp/map.js' %}">initMap();</script>
+
 </body>
 </html>
