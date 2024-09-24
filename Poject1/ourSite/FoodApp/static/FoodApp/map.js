@@ -70,5 +70,83 @@ function searchRestaurant() {
         }
     })
 
+    function createMarker(place, index) {
+        var marker = new google.maps.Marker({
+            map: map,
+            position: place.geometry.location,
+            title: place.name  // Set the marker's title (shows on hover by default)
+        });
+
+        var googleMapsLink = 'https://www.google.com/maps/place/?q=place_id:' + place.place_id;
+
+        var infoWindow = new google.maps.InfoWindow({
+            content: '<div id="infowindow-content"><strong>' + place.name + '</strong><br>' +
+                     'Rating: ' + (place.rating ? place.rating : 'No rating available') + '<br>' +
+                     'Address: ' + place.vicinity + '<br>' +
+                     '<a href="' + googleMapsLink + '" target="_blank">View on Google Maps</a></div>'
+        });
+
+        let isMouseOverInfoWindow = false;
+
+        // Add listeners to the InfoWindow content for mouseover and mouseout
+        google.maps.event.addListener(infoWindow, 'domready', function() {
+            var infoWindowContent = document.getElementById('infowindow-content');
+            infoWindowContent.addEventListener('mouseover', function() {
+                isMouseOverInfoWindow = true;
+            });
+            infoWindowContent.addEventListener('mouseout', function() {
+                isMouseOverInfoWindow = false;
+                setTimeout(function() {
+                    if (!isMouseOverMarker && !isMouseOverInfoWindow) {
+                        infoWindow.close();
+                    }
+                }, 100);
+            });
+        });
+
+        let isMouseOverMarker = false;
+
+        // Open InfoWindow when hovering over the marker
+        marker.addListener('mouseover', function() {
+            isMouseOverMarker = true;
+            infoWindow.open(map, marker);
+        });
+
+        // Close InfoWindow only if both mouse is not over the marker and not over the InfoWindow
+        marker.addListener('mouseout', function() {
+            isMouseOverMarker = false;
+            setTimeout(function() {
+                if (!isMouseOverMarker && !isMouseOverInfoWindow) {
+                    infoWindow.close();
+                }
+            }, 100);
+        });
+
+        // Bind hover event to the restaurant list item too
+        var listItem = document.getElementById('restaurant-' + index);
+        listItem.addEventListener('mouseover', function() {
+            isMouseOverMarker = true;
+            infoWindow.open(map, marker);
+        });
+        listItem.addEventListener('mouseout', function() {
+            isMouseOverMarker = false;
+            setTimeout(function() {
+                if (!isMouseOverMarker && !isMouseOverInfoWindow) {
+                    infoWindow.close();
+                }
+            }, 100);
+        });
+    }
+
+    function createRestaurantListItem(place, index) {
+        // Create a list item in the HTML for the restaurant
+        var restaurantList = document.getElementById('restaurant-list');
+        var listItem = document.createElement('li');
+        listItem.id = 'restaurant-' + index;
+        listItem.innerHTML = place.name + ' - ' + place.vicinity;
+        restaurantList.appendChild(listItem);
+    }
+
+
 
 }
