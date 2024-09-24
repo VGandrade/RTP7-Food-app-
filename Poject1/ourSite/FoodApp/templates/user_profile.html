@@ -5,30 +5,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ user_profile.username }}'s Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Modak:wght@400;700&display=swap" rel="stylesheet">
+
     <style>
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
-            font-family: Arial, sans-serif;
         }
         /* Full-page map background */
         body {
             background-size: cover;
         }
         .header {
-            background-color: #f47920;
-            color: white;
-            text-align: center;
-            padding: 10px 0;
-            font-size: 32px;
-            font-weight: bold;
-            position: relative;
-            z-index: 1;
-        }
+    background-color: rgba(246, 140, 52, 0.85); /* Semi-transparent background */
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 36px;
+    font-family: "Modak", sans-serif;
+    font-weight: normal;
+    text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000;
+    -webkit-text-stroke: 1px black;
+    position: relative;
+    z-index: 1; /* Ensure header is above the background */
+}
+
+/* Background Section */
+.background {
+    flex: 1; /* Allow this to take remaining space */
+    background-image: url("{% static 'FoodApp/bg.jpg' %}");
+    background-size: cover; /* Cover the whole area */
+    background-position: contain; /* Center the image */
+    background-repeat: no-repeat;
+    z-index: -1;
+}
+
+/* Other styles remain unchanged */
+
+
+        /* Hamburger Icon Styling */
         .menu-icon {
             position: absolute;
-            top: 20px;
+            top: 30px;
             right: 20px;
             width: 40px;
             height: 30px;
@@ -37,19 +56,22 @@
             flex-direction: column;
             justify-content: space-between;
         }
+
         .menu-icon div {
             width: 40px;
             height: 8px;
             background-color: black;
             border-radius: 2px;
         }
+
         /* Dropdown Menu Styling */
         .dropdown-menu {
-            display: none;
+            display: none; /* Hidden by default */
             position: absolute;
-            top: 50px;
-            right: 20px;
+            top: 40px;
+            right: 40px;
             font-size: 16px;
+            font-weight: lighter;
             text-shadow: none;
             border-radius: 5px;
             z-index: 2;
@@ -62,15 +84,32 @@
         .dropdown-menu a {
             display: block;
             color: black;
-            font-size: 18px;
+            font-size: 24px;
+            text-shadow: none;
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: lighter;
             text-decoration: none;
             padding: 5px;
-            font-weight: lighter;
         }
-
-        .dropdown-menu a:hover {
-            background-color: #ffc299;
+        .logo {
+            position: absolute;
+            z-index: 2;
+            top: 7.5px;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
+        .logo div {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%; /* Make it a circle */
+    background-image: url("{% static 'FoodApp/logo.jpg' %}");
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat; /* Ensure no repeat */
+    border: 5px solid black; /* Add border around the image */
+}
 
         /* Profile card styling */
         .profile-card {
@@ -104,6 +143,9 @@
 
     <!-- Header Section with Hamburger Menu -->
     <div class="header">
+        <div class="logo">
+            <div></div>
+        </div>
         Atlanta Food Finder
         <div class="menu-icon" onclick="toggleMenu()">
             <div></div>

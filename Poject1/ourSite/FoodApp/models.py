@@ -13,6 +13,7 @@ class Restaurant(models.Model):
     name = models.CharField(max_length=100, default="Unknown Name")
     location = models.CharField(max_length=255, default="Unknown Address")  # Address of the restaurant
     rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)  # Rating between 0.00 and 5.00
+    distance = models.DecimalField(max_digits=5, decimal_places=2, default=0.00) #  Distances from user to restaurants
 
     def __str__(self):
         return self.name

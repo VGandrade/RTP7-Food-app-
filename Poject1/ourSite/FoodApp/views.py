@@ -19,6 +19,8 @@ def restaurant_list(request):
     name_query = request.GET.get('name', '')  # Get the search term for name
     cuisine_query = request.GET.get('cuisine', '')  # Get the search term for cuisine
     sort_by = request.GET.get('sort', 'rating_high_first')  # Default sort by rating
+    distance_to = request.GET.get('distance', 'distance_high_first')
+
 
     # Search capabilities
     restaurants = Restaurant.objects.all()
@@ -41,7 +43,8 @@ def restaurant_list(request):
         'restaurants': restaurants,
         'name_query': name_query,
         'cuisine_query': cuisine_query,
-        'sort_by': sort_by
+        'sort_by': sort_by,
+        'distance_to': distance_to
     })
 
 

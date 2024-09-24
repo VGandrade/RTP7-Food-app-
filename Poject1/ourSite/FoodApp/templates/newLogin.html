@@ -4,13 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Modak:wght@400;700&display=swap" rel="stylesheet">
+
     <title>Atlanta Food Finder - Login</title>
     <style>
-        body {
+        body, html {
             margin: 0;
-            font-family: Modak, sans-serif;
-            background-size: cover;
-            background-position: center;
+            padding: 0;
+            height: 100%;
+        }
+        body {
+            overflow-y: hidden;
+            
         }
 
         .container {
@@ -18,7 +23,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f68c34;
+            background-color: #fab67e;
         }
 
         .login-box {
@@ -28,6 +33,7 @@
             border-radius: 30px;
             border: 5px solid black;
             text-align: center;
+            margin-bottom: 60px;
         }
 
         .login-box h1 {
@@ -71,14 +77,18 @@
         }
 
         .header {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            padding: 20px;
-            background-color: white;
-            text-align: center;
-        }
+    background-color: rgba(246, 140, 52, 0.85); /* Semi-transparent background */
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 36px;
+    font-weight: normal;
+    font-family: "Modak", sans-serif;
+    text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000;
+    -webkit-text-stroke: 1px black;
+    position: relative;
+    z-index: 1; /* Ensure header is above the background */
+}
 
         .header h2 {
             display: inline;
@@ -89,7 +99,7 @@
         /* Hamburger Icon Styling */
         .menu-icon {
             position: absolute;
-            top: 20px;
+            top: 30px;
             right: 20px;
             width: 40px;
             height: 30px;
@@ -101,7 +111,7 @@
 
         .menu-icon div {
             width: 40px;
-            height: 6px;
+            height: 8px;
             background-color: black;
             border-radius: 2px;
         }
@@ -110,9 +120,10 @@
         .dropdown-menu {
             display: none; /* Hidden by default */
             position: absolute;
-            top: 60px;
-            right: 20px;
+            top: 40px;
+            right: 40px;
             font-size: 16px;
+            font-weight: lighter;
             text-shadow: none;
             border-radius: 5px;
             z-index: 2;
@@ -128,6 +139,7 @@
             font-size: 24px;
             text-shadow: none;
             font-family: 'Times New Roman', Times, serif;
+            font-weight: lighter;
             text-decoration: none;
             padding: 5px;
         }
@@ -145,25 +157,34 @@
             color: blue;
         }
         
-        {#.logo div {#}
-        {#    width: 70px;#}
-        {#    height: 70px;#}
-        {#    border-radius: 50%; /* Make it a circle */#}
-        {#    background-image: url("{% static 'FoodApp/logo.jpg' %}");#}
-        {#    background-position: center;#}
-        {#    background-size: contain;#}
-        {#    background-repeat: no-repeat; /* Ensure no repeat */#}
-        {#    border: 5px solid black; /* Add border around the image */#}
-        {#}#}
+        .logo {
+            position: absolute;
+            z-index: 2;
+            top: 7.5px;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .logo div {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%; /* Make it a circle */
+    background-image: url("{% static 'FoodApp/logo.jpg' %}");
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat; /* Ensure no repeat */
+    border: 5px solid black; /* Add border around the image */
+}
 
     </style>
 </head>
 <body>
     <div class="header">
-{#        <div class="logo">#}
-{#            <div></div>#}
-{#        </div>#}
-        <h2>Atlanta Food Finder</h2>
+        <div class="logo">
+            <div></div>
+        </div>
+        Atlanta Food Finder
         <div class="menu-icon" onclick="toggleMenu()">
             <div></div>
             <div></div>
