@@ -7,10 +7,9 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from .forms import ReviewForm
-
-
-
-
+import json
+import requests
+from django.http import JsonResponse
 
 
 # Create your views here.
@@ -19,6 +18,8 @@ def landing_page(request):
 
 # Views for /FoodApp/restaurants
 def restaurant_list(request):
+    api_key = 'AIzaSyD4oBoretFq5JNK1Zzo2gxk5rSedxmtjiw'  # Replace with your actual Google Places API key
+    api_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
 
     # Get query parameters from the request (user input)
     name_query = request.GET.get('name', '')  # Get the search term for name
@@ -26,6 +27,25 @@ def restaurant_list(request):
     sort_by = request.GET.get('sort', 'rating_high_first')  # Default sort by rating
     distance_to = request.GET.get('distance', 'distance_high_first')
 
+    params = {
+        'location': '33.7490,-84.3880',  # Atlanta, GA coordinates (latitude, longitude)
+        'radius': 5000,  # Radius in meters (5km)
+        'type': 'restaurant',
+        'keyword': name_query,  # Search term for name
+        'key': api_key
+    }
+
+    response = requests.get(api_url, params=params)
+    restaurant_data_from_api = response.json().get('results', []) # This should be replaced with actual API data
+
+    # Save restaurant data to the database
+    for restaurant in restaurant_data_from_api:
+        name = restaurant['name']
+        location = restaurant['location']
+        rating = restaurant.get('rating', 0)  # Use get to provide default value if rating is missing
+        distance = restaurant.get('distance', 0)
+
+        save_restaurant_to_db(name, location, rating, distance)
 
     # Search capabilities
     restaurants = Restaurant.objects.all()
@@ -52,7 +72,9 @@ def restaurant_list(request):
         'distance_to': distance_to
     })
 
-
+def save_restaurant_to_db(name, location, rating, distance):
+    if not Restaurant.objects.filter(name=name, location=location).exists():
+        Restaurant.objects.create(name=name, location=location, rating=rating, distance=distance)
 
     #View for userss
 
@@ -218,3 +240,30 @@ def leave_and_list_reviews(request):
         'reviews': reviews,
         'restaurants': restaurants,
     })
+
+def save_restaurant(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+
+        # Extract restaurant details from the request
+        name = data.get('name', 'Unknown Name')
+        location = data.get('location', 'Unknown Address')
+        rating = data.get('rating', 0.00)
+        distance = data.get('distance', 0.00)
+
+        # Check if restaurant already exists
+        restaurant, created = Restaurant.objects.get_or_create(
+            name=name,
+            defaults={'location': location, 'rating': rating, 'distance': distance}
+        )
+
+        # Update restaurant details if not created
+        if not created:
+            restaurant.location = location
+            restaurant.rating = rating
+            restaurant.distance = distance
+            restaurant.save()
+
+        return JsonResponse({'message': 'Restaurant saved successfully'}, status=200)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
