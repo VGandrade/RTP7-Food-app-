@@ -10,4 +10,5 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('profile/<str:usern>/', views.user_profile, name='user_profile'),
     path('custom_password_reset/', views.custom_password_reset, name='custom_password_reset'),
+    path('add_favorite/<str:username>/', views.add_favorite, name='add_favorite'),
 ]
