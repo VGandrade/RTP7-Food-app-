@@ -260,6 +260,9 @@ li {
 
         <!-- Restaurant List -->
         <div class="restaurant-dropdown-container">
+        <form method="POST" action="{% url 'add_favorite' username=request.user.username %}">
+            {% csrf_token %}
+            {{ form.as_p }}
             <label for="restaurant">Select a Restaurant:</label>
             <select id="restaurant" name="restaurant" onchange="showRestaurantDetails(this)">
                 <option value="" selected disabled>Select a restaurant</option>
@@ -271,6 +274,8 @@ li {
                     <option disabled>No restaurants found</option>
                 {% endfor %}
             </select>
+            <button type="submit">Add to Favourite restaurant</button>
+        </form>
         </div>
     </div>
 
