@@ -1,9 +1,11 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django import forms
+import json
 
 
 # Create your models here.
-#class Cuisine(models.Model):
+# class Cuisine(models.Model):
 #    name = models.CharField(max_length=100, unique=True, default="Unknown Name")
 
 #    def __str__(self):
@@ -13,22 +15,35 @@ class Restaurant(models.Model):
     name = models.CharField(max_length=100, default="Unknown Name")
     location = models.CharField(max_length=255, default="Unknown Address")  # Address of the restaurant
     rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)  # Rating between 0.00 and 5.00
-    distance = models.DecimalField(max_digits=5, decimal_places=2, default=0.00) #  Distances from user to restaurants
+    distance = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)  # Distances from user to restaurants
 
     def __str__(self):
         return self.name
 
 
-class User(models.Model):
-    class User(models.Model):
-        usern = models.CharField(max_length=70, default="Unknown username", unique=True)
-        first_name = models.CharField(max_length=70, default="Unknown first_name", unique=False)
-        last_name = models.CharField(max_length=70, default="Unknown last_name", unique=False)
-        password = models.CharField(max_length=50, default="password")
-        favorites = models.JSONField(default=list, blank =True)
+class User(AbstractUser):
+    #    usern = models.CharField(max_length=70, default="Unknown username", unique=True)
+    #    first_name = models.CharField(max_length=70, default="Unknown first_name", unique=False)
+    #    last_name = models.CharField(max_length=70, default="Unknown last_name", unique=False)
+    #    password = models.CharField(max_length=256, default="password")
+    #    favorites = models.JSONField(default=list, blank =True)
+    #    last_login = models.DateTimeField(null=True,blank=True)
+    username = models.CharField(max_length=70, default="Unknown_username", unique=True)
+    favorites = models.JSONField(default=list, blank=True)
 
-        def __str__(self):
-            return self.usern
+    def add_favorite(self, restaurant):
+        # if restaurant not in self.favorites:
+        self.favorites.append(restaurant)
+        self.save()
+
+    def remove_favorite(self, restaurant):
+        # if restaurant in self.favorites:
+        self.favorites.remove(restaurant)
+        self.save()
+
+    def __str__(self):
+        return self.username
+
 
 # this is the model that creates the password reset
 class CustomPasswordResetForm(forms.Form):
