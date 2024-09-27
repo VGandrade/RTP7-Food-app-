@@ -62,14 +62,25 @@ function createMarker(place) {
         });
 
         // Track when the mouse leaves the InfoWindow
-        infoWindowElement.addEventListener('mouseout', function () {
-            isMouseOverInfoWindow = false;
-            setTimeout(function () {
-                if (!isMouseOverMarker && !isMouseOverInfoWindow) {
-                    infoWindow.close();
-                }
-            }, 100);
-        });
+        // infoWindowElement.addEventListener('mouseout', function () {
+        //     isMouseOverInfoWindow = false;
+        //     setTimeout(function () {
+        //         if (!isMouseOverMarker && !isMouseOverInfoWindow) {
+        //             infoWindow.close();
+        //         }
+        //     }, 100);
+        // });
+
+        if (infoWindowElement) {
+            infoWindowElement.addEventListener('mouseout', function () {
+                isMouseOverInfoWindow = false;
+                setTimeout(function () {
+                    if (!isMouseOverMarker && !isMouseOverInfoWindow) {
+                        infoWindow.close();
+                    }
+                }, 100);
+            });
+        }
     });
 
     console.log("Marker created for: " + place.name + " at " + place.geometry.location);
