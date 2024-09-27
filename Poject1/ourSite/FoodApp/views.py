@@ -2,8 +2,10 @@ from django.http import HttpResponse
 from .models import Restaurant, User, CustomPasswordResetForm
 from django.shortcuts import render, redirect,  get_object_or_404
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
 from django.contrib import messages
+from django.contrib.auth.hashers import make_password, check_password
+from django.utils import timezone
+
 
 
 
@@ -89,9 +91,9 @@ def login_view(request):
         password = request.POST.get('password')
 
         # Authenticate the user
-        user = authenticate(request, username=username, password=password)
+        user = User.objects.get(username=username)
 
-        if user is not None:
+        if (check_password(password, user.password)) :
             # Login the user
             login(request, user)
             return redirect('restaurant_list')  # Redirect to user list or another appropriate page
@@ -105,8 +107,11 @@ def login_view(request):
 
 # View for user profile
 def user_profile(request, usern):
-    user_profile = get_object_or_404(User, username=usern)
-    return render(request, 'user_profile.html', {'user_profile': user_profile})
+    user = User.objects.get(username=usern)
+    print("profile " + user.username)
+    for x in range(len(user.favorites)):
+        print(user.favorites[x])
+    return render(request, 'user_profile.html', {'user_profile': user})
 
 
 def custom_password_reset(request):
@@ -139,3 +144,12 @@ def custom_password_reset(request):
         form = CustomPasswordResetForm()
 
     return render(request, 'custom_password_reset.html', {'form': form})
+
+def add_favorite(request, username):
+    user = User.objects.get(username=username)
+    restaurant = request.POST.get('restaurant')
+    print(len(user.favorites))
+    user.add_favorite(restaurant)
+    for x in range(len(user.favorites)):
+        print(user.favorites[x])
+    return redirect('restaurant_list')
