@@ -36,10 +36,10 @@
     flex: 1; /* Allow this to take remaining space */
     background-image: url("{% static 'FoodApp/bg.jpg' %}");
     background-size: cover; /* Cover the whole area */
-    {#background-position: contain; /* Center the image */#}
+    background-position: contain; /* Center the image */
     background-size: contain; /* Scale the image to fit the container */
     background-repeat: no-repeat;
-    z-index: -1;
+    z-index: 1;
 }
 
 /* Other styles remain unchanged */
@@ -119,15 +119,16 @@
             margin: 100px auto;
             padding: 20px;
             border-radius: 15px;
+            border: 5px, solid, black;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
             text-align: left;
             position: relative;
             z-index: 1;
         }
         .profile-card h1 {
-            font-size: 22px;
+            font-size: 28px;
             text-align: center;
-            color: #f47920;
+            color: #000000;
             font-weight: bold;
         }
         .profile-card p {
@@ -178,6 +179,7 @@
         </ul>
 
     </div>
+    <div class="background"></div>
 
     <script>
         function toggleMenu() {
