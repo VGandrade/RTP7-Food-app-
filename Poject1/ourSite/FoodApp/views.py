@@ -157,28 +157,64 @@ def add_favorite(request, username):
         print(user.favorites[x])
     return redirect('restaurant_list')
 
+# @login_required
+# def leave_review(request):
+#     if request.method == "POST":
+#         form = ReviewForm(request.POST)
+#         if form.is_valid():
+#             restaurant_name = form.cleaned_data['restaurant']
+#             try:
+#                 restaurant = Restaurant.objects.get(name=restaurant_name)
+#             except Restaurant.DoesNotExist:
+#                 messages.error(request, f"No restaurant found with the name {restaurant_name}")
+#                 return redirect('leave_review')  # Redirect back to the review form if no restaurant is found
+#
+#             review_content = form.cleaned_data['review']
+#             review = Review(user=request.user, restaurant=restaurant, content=review_content)
+#             review.save()
+#             messages.success(request, 'Your review has been posted.')
+#             return redirect('review_list')  # Replace with the appropriate view for listing reviews
+#     else:
+#         form = ReviewForm()
+#
+#     return render(request, 'leave_review.html', {'form': form})
+#
+# def review_list(request):
+#     reviews = Review.objects.all().order_by('-created_at')
+#     return render(request, 'review_list.html', {'reviews': reviews})
+
+
 @login_required
-def leave_review(request):
+def leave_and_list_reviews(request):
+    reviews = None  # Initialize reviews variable
+
+    # Handle review submission
     if request.method == "POST":
         form = ReviewForm(request.POST)
         if form.is_valid():
-            restaurant_name = form.cleaned_data['restaurant']
-            try:
-                restaurant = Restaurant.objects.get(name=restaurant_name)
-            except Restaurant.DoesNotExist:
-                messages.error(request, f"No restaurant found with the name {restaurant_name}")
-                return redirect('leave_review')  # Redirect back to the review form if no restaurant is found
-
+            restaurant = form.cleaned_data['restaurant']
             review_content = form.cleaned_data['review']
             review = Review(user=request.user, restaurant=restaurant, content=review_content)
             review.save()
             messages.success(request, 'Your review has been posted.')
-            return redirect('review_list')  # Replace with the appropriate view for listing reviews
+            return redirect('leave_and_list_reviews')  # Reload the page after form submission
     else:
         form = ReviewForm()
 
-    return render(request, 'leave_review.html', {'form': form})
+    # Handle displaying reviews for a selected restaurant
+    if 'restaurant_filter' in request.GET:
+        restaurant_name = request.GET['restaurant_filter']
+        try:
+            selected_restaurant = Restaurant.objects.get(name=restaurant_name)
+            reviews = Review.objects.filter(restaurant=selected_restaurant)
+        except Restaurant.DoesNotExist:
+            messages.error(request, f"No restaurant found with the name {restaurant_name}")
+            reviews = None
 
-def review_list(request):
-    reviews = Review.objects.all().order_by('-created_at')
-    return render(request, 'review_list.html', {'reviews': reviews})
+    restaurants = Restaurant.objects.all()  # For the dropdown selection
+
+    return render(request, 'leave_and_list_reviews.html', {
+        'form': form,
+        'reviews': reviews,
+        'restaurants': restaurants,
+    })
