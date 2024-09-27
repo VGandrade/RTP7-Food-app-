@@ -11,4 +11,6 @@ urlpatterns = [
     path('profile/<str:usern>/', views.user_profile, name='user_profile'),
     path('custom_password_reset/', views.custom_password_reset, name='custom_password_reset'),
     path('add_favorite/<str:username>/', views.add_favorite, name='add_favorite'),
+path('leave_review/', views.leave_review, name='leave_review'),
+    path('reviews/', views.review_list, name='review_list'),
 ]

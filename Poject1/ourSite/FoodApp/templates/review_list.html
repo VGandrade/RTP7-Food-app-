@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    {% for review in reviews %}
+        <div>
+            <strong>Reviewer:</strong> {{ review.user.username }}<br>
+            <strong>Restaurant:</strong> {{ review.restaurant.name }}<br>
+            <strong>Review:</strong> {{ review.content }}<br>
+            <hr>
+        </div>
+    {% endfor %}
+
+
+</body>
+</html>
