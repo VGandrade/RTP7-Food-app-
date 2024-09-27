@@ -36,7 +36,8 @@
     flex: 1; /* Allow this to take remaining space */
     background-image: url("{% static 'FoodApp/bg.jpg' %}");
     background-size: cover; /* Cover the whole area */
-    background-position: contain; /* Center the image */
+    {#background-position: contain; /* Center the image */#}
+    background-size: contain; /* Scale the image to fit the container */
     background-repeat: no-repeat;
     z-index: -1;
 }
@@ -167,7 +168,15 @@
         <h1>Profile of {{ user_profile.username}}</h1>
         <p><strong>First Name:</strong> {{ user_profile.first_name }}</p>
         <p><strong>Last Name:</strong> {{ user_profile.last_name }}</p>
-        <p><strong>Favorites:</strong> {{ user_profile.favorites }}</p>
+        <p><strong>Favorites:</strong></p>
+        <ul>
+            {% for restaurant in user_profile.favorites %}
+                <li>{{ restaurant }}</li>
+            {% empty %}
+                <li>No favorite restaurants added yet.</li>
+            {% endfor %}
+        </ul>
+
     </div>
 
     <script>
