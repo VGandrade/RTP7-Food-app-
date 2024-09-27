@@ -1,10 +1,13 @@
 from django.http import HttpResponse
-from .models import Restaurant, User, CustomPasswordResetForm
+from .models import Restaurant, User, CustomPasswordResetForm, Review
 from django.shortcuts import render, redirect,  get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
+from .forms import ReviewForm
+
 
 
 
@@ -153,3 +156,29 @@ def add_favorite(request, username):
     for x in range(len(user.favorites)):
         print(user.favorites[x])
     return redirect('restaurant_list')
+
+@login_required
+def leave_review(request):
+    if request.method == "POST":
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            restaurant_name = form.cleaned_data['restaurant']
+            try:
+                restaurant = Restaurant.objects.get(name=restaurant_name)
+            except Restaurant.DoesNotExist:
+                messages.error(request, f"No restaurant found with the name {restaurant_name}")
+                return redirect('leave_review')  # Redirect back to the review form if no restaurant is found
+
+            review_content = form.cleaned_data['review']
+            review = Review(user=request.user, restaurant=restaurant, content=review_content)
+            review.save()
+            messages.success(request, 'Your review has been posted.')
+            return redirect('review_list')  # Replace with the appropriate view for listing reviews
+    else:
+        form = ReviewForm()
+
+    return render(request, 'leave_review.html', {'form': form})
+
+def review_list(request):
+    reviews = Review.objects.all().order_by('-created_at')
+    return render(request, 'review_list.html', {'reviews': reviews})

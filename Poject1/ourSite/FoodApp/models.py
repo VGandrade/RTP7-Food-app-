@@ -3,6 +3,8 @@ from django.db import models
 from django import forms
 import json
 
+from django.conf import settings
+
 
 # Create your models here.
 # class Cuisine(models.Model):
@@ -19,6 +21,7 @@ class Restaurant(models.Model):
 
     def __str__(self):
         return self.name
+
 
 
 class User(AbstractUser):
@@ -62,6 +65,17 @@ class CustomPasswordResetForm(forms.Form):
             raise forms.ValidationError("Passwords do not match.")
 
         return cleaned_data
+
+
+class Review(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # The user who left the review
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)  # The restaurant being reviewed
+    content = models.TextField()  # The review content
+    rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)  # User's rating for the restaurant
+    created_at = models.DateTimeField(auto_now_add=True)  # When the review was left
+
+    def __str__(self):
+        return f"Review by {self.user.username} for {self.restaurant.name}"
 
 
 
