@@ -35,17 +35,17 @@ def restaurant_list(request):
         'key': api_key
     }
 
-    response = requests.get(api_url, params=params)
-    restaurant_data_from_api = response.json().get('results', []) # This should be replaced with actual API data
+    #    response = requests.get(api_url, params=params)
+    #    restaurant_data_from_api = response.json().get('results', []) # This should be replaced with actual API data
 
-    # Save restaurant data to the database
-    for restaurant in restaurant_data_from_api:
-        name = restaurant['name']
-        location = restaurant['location']
-        rating = restaurant.get('rating', 0)  # Use get to provide default value if rating is missing
-        distance = restaurant.get('distance', 0)
+        # Save restaurant data to the database
+     #   for restaurant in restaurant_data_from_api:
+      #      name = restaurant['name']
+       #     location = restaurant['location']
+        #    rating = restaurant.get('rating', 0)  # Use get to provide default value if rating is missing
+         #   distance = restaurant.get('distance', 0)
 
-        save_restaurant_to_db(name, location, rating, distance)
+          #  save_restaurant_to_db(name, location, rating, distance)
 
     # Search capabilities
     restaurants = Restaurant.objects.all()
