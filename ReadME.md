@@ -36,3 +36,21 @@
 | Shlok | Set up HTML for sign in page, create user page, and profile page |
 | Victor | Finished sign in, create user funcitonality and made sure it was connected to the database |
 
+### Week 3
+| Task | Person | Done |
+| --- | --- | --- | 
+| Help finalize design for each page with Dalton | Shlok | <ul><li>[x] DONE</li></ul> 
+| Work on getting the password reset system | Victor | <ul><li>[x] DONE</li></ul> 
+| Help finalize design for each page with Shlok | Dalton | <ul><li>[x] DONE</li></ul> 
+| Work on adding a favorites system | Rachel | <ul><li>[x] DONE</li></ul> 
+| Get restaurant markers to sort by distance and add address and ratings to each marker | Ifaz | <ul><li>[x] DONE</li></ul> 
+
+**End of week Summary:**
+| Person | Tasks Completed |
+| --- | --- |
+| Dalton | Fixed sign in and create user page design to be consistent  |
+| Ifaz | Got markers to work with distance sorting, and added ratings + address to each marker |
+| Rachel | Added favorites system |
+| Shlok | Helped fix sign in and create user page design |
+| Victor | Added password reset features |
+
