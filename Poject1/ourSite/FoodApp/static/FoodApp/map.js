@@ -84,28 +84,6 @@ function createMarker(place, isClosest = false) {
             }, 100);
         });
     });
-
-    var restaurantData = {
-        name: place.name,
-        location: place.vicinity || 'Unknown Address',
-        rating: place.rating || 0,
-        distance: calculateDistance(place.geometry.location)  // Assuming you define this function
-    };
-
-    // Send the restaurant data to the backend
-    fetch('/save_restaurant/', {
-        method: 'POST',
-        body: JSON.stringify(restaurantData),
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken')  // If CSRF is enabled
-        }
-    }).then(response => response.json())
-    .then(data => {
-        console.log(data.message);  // Success message
-    }).catch(error => {
-        console.error('Error saving restaurant:', error);
-    });
 }
 
 function initMap() {
@@ -125,7 +103,7 @@ function initMap() {
             };
 
             map.setCenter(userLocation);
-            createMarker({ geometry: { location: userLocation }, name: 'Your Location' }, false);  // Pass false for isClosest
+            createMarker({ geometry: { location: userLocation }, name: 'Your Location' });
         });
     }
 
@@ -170,12 +148,12 @@ function searchRestaurant() {
                     closestRestaurant = results[i];
                 }
 
-                createMarker(results[i], false);  // Pass false for normal markers
+                createMarker(results[i]);
             }
 
             // Mark the closest restaurant with a different color
             if (closestRestaurant) {
-                createMarker(closestRestaurant, true);  // Pass true for the closest restaurant
+                createMarker(closestRestaurant, true);
             }
 
             map.setCenter(results[0].geometry.location);
