@@ -54,3 +54,22 @@
 | Shlok | Helped fix sign in and create user page design |
 | Victor | Added password reset features |
 
+### Week 4
+| Task | Person | Done |
+| --- | --- | --- | 
+| Work on website | Shlok | <ul><li>[x] DONE</li></ul> 
+| Make sure user funcitonalities are all finalized | Victor | <ul><li>[x] DONE</li></ul> 
+| Finalize password reset page and profile page | Dalton | <ul><li>[x] DONE</li></ul> 
+| Get a rough review and ratings system in place | Rachel | <ul><li>[x] DONE</li></ul> 
+| Pull restaurant information into database for the restaurant dropdown system | Ifaz | <ul><li>[] DONE</li></ul> 
+
+**End of week Summary:**
+| Person | Tasks Completed |
+| --- | --- |
+| Dalton | Finalized all the HTML for pages |
+| Ifaz |  |
+| Rachel | Finished funcitonality for review and ratings page |
+| Shlok | Finished adding information to the website |
+| Victor | Finalized all user functionalites |
+
+
