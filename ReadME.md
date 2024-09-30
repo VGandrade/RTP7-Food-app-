@@ -27,3 +27,12 @@
 | Work on getting the restaurant list in database sorted so we can pull restaurant data for use on search page | Rachel | <ul><li>[x] DONE</li></ul> 
 | Get all Atlanta restaurant data to set up list in database | Ifaz | <ul><li>[x] DONE</li></ul> 
 
+**End of week Summary:**
+| Person | Tasks Completed |
+| --- | --- |
+| Dalton | Set up welcome page HTML and restaurant finder HTML, also implemented hamburger clicker funcitonality to move pages |
+| Ifaz | Got the restaurant search funcitonality to work, working on implementing marker system and narrowing search |
+| Rachel | Fixed database so it wouldn't cause errors |
+| Shlok | Set up HTML for sign in page, create user page, and profile page |
+| Victor | Finished sign in, create user funcitonality and made sure it was connected to the database |
+
