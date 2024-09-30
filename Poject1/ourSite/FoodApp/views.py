@@ -18,7 +18,7 @@ def landing_page(request):
 
 # Views for /FoodApp/restaurants
 def restaurant_list(request):
-    api_key = 'AIzaSyD4oBoretFq5JNK1Zzo2gxk5rSedxmtjiw'  # Replace with your actual Google Places API key
+    api_key =  'AIzaSyD4oBoretFq5JNK1Zzo2gxk5rSedxmtjiw'  # Replace with your actual Google Places API key
     api_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
 
     # Get query parameters from the request (user input)
