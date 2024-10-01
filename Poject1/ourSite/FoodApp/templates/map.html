@@ -249,7 +249,7 @@ li {
                         <option value="rating_high_first" {% if sort_by == 'rating_high_first' %}selected{% endif %}>Rating - High to Low</option>
                         <option value="rating_low_first" {% if sort_by == 'rating_low_first' %}selected{% endif %}>Rating - Low to High</option>
                     </select>
-        
+
                     <!-- Search by Cuisine -->
                     <select name="distance" id="distance">
                         <option value="close_to_far" {% if sort_by == 'close_to_far' %}selected{% endif %}>Distance - High to Low</option>
@@ -259,7 +259,7 @@ li {
                 </form>
             </div>
         </div>
-        
+
 
         <!-- Restaurant List -->
         <div class="restaurant-dropdown-container">
@@ -280,6 +280,16 @@ li {
             <button type="submit">Add to Favourite restaurant</button>
         </form>
         </div>
+    </div>
+    <div class="restaurant-dropdown-container">
+        <label for="favorite">Favorite Restaurant:</label>
+        <select id="favorite" name="favorite">
+            {% for favorite in user.favorites %}
+                <option value="{{ favorite }}">
+                    {{ favorite }}
+                </option>
+            {% endfor %}
+        </select>
     </div>
 
     <!-- Restaurant Details Display -->
