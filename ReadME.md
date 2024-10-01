@@ -73,3 +73,10 @@
 | Victor | Finalized all user functionalites |
 
 
+
+Deliverables 
+| --- | --- |
+| Website link | "" |
+| Github repo link | "" |
+
+
