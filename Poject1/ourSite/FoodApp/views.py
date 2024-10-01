@@ -26,7 +26,7 @@ def restaurant_list(request):
 
     params = {
         'location': '33.7490,-84.3880',  # Atlanta, GA coordinates
-        'radius': 5000,  # Radius in meters (5km)
+        'radius': 10600,  # Radius in meters (10.6km)
         'type': 'restaurant',
         'keyword': name_query,
         'key': api_key

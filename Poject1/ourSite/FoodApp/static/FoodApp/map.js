@@ -1,6 +1,8 @@
 var map; // Global variable for the map
 var service;
 var userLocation; // To store the user's current location
+var markers = []; // Store all markers
+var infoWindows = []; // Store all info windows
 
 // Function to calculate distance between two points using the Haversine formula
 function calculateDistance(loc1, loc2) {
@@ -15,6 +17,14 @@ function calculateDistance(loc1, loc2) {
     return R * 2 * Math.asin(Math.sqrt(a));
 }
 
+// Close all open info windows
+function closeAllInfoWindows() {
+    infoWindows.forEach(function (infoWindow) {
+        infoWindow.close();
+    });
+}
+
+// Function to create markers and add info windows
 function createMarker(place, isClosest = false) {
     // Check if geometry exists
     if (!place.geometry || !place.geometry.location) {
@@ -31,7 +41,8 @@ function createMarker(place, isClosest = false) {
         map: map,
         position: place.geometry.location,
         title: place.name,
-        icon: markerIcon // Change icon for the closest restaurant
+        icon: markerIcon,
+        place: place  // Store the entire place object, including place_id
     });
 
     var googleMapsLink = `https://www.google.com/maps/place/?q=place_id:${place.place_id}`;
@@ -50,13 +61,18 @@ function createMarker(place, isClosest = false) {
         content: infoWindowContent
     });
 
+    // Store marker and infoWindow for later use
+    markers.push({ marker: marker, infoWindow: infoWindow, placeId: place.place_id });
+    infoWindows.push(infoWindow);
+
     let isMouseOverMarker = false;
     let isMouseOverInfoWindow = false;
 
     // Open InfoWindow when hovering over the marker
     marker.addListener('mouseover', function () {
         isMouseOverMarker = true;
-        infoWindow.open(map, marker);
+        closeAllInfoWindows();  // Close any open info windows
+        infoWindow.open(map, marker);  // Open the new info window
     });
 
     // Close InfoWindow when mouse leaves both marker and InfoWindow
@@ -86,6 +102,7 @@ function createMarker(place, isClosest = false) {
     });
 }
 
+// Initialize the map
 function initMap() {
     var atlanta = { lat: 33.7490, lng: -84.3880 };
 
@@ -107,17 +124,32 @@ function initMap() {
         });
     }
 
+    // Handle search form submission
     document.getElementById("search-form").addEventListener("submit", (e) => {
         e.preventDefault();
         searchRestaurant();
     });
+
+    // Handle dropdown selection
+    document.getElementById("restaurant").addEventListener("change", function () {
+        let selectedPlaceId = this.value;
+        let selected = markers.find(m => m.placeId === selectedPlaceId);  // Find by place_id
+
+        if (selected) {
+            closeAllInfoWindows();  // Close all open info windows
+            selected.infoWindow.open(map, selected.marker);  // Open the selected info window
+            map.setCenter(selected.marker.getPosition());  // Center the map on the selected restaurant
+        }
+    });
 }
 
+// Search for restaurants
 function searchRestaurant() {
     console.log("searching");
 
     var name = document.querySelector('input[name="name"]').value;
-    console.log("Name: " + name);
+    var sortBy = 'rating_high_first';  // Sort by rating high by default
+    var distanceFilter = document.querySelector('select[name="distance"]').value;
 
     var mapOptions = {
         center: new google.maps.LatLng(33.7466, -84.3877),
@@ -129,55 +161,52 @@ function searchRestaurant() {
 
     var request = {
         location: new google.maps.LatLng(33.7490, -84.3880),  // Center search around Atlanta
-        radius: '5000',  // Search within a 5km radius
+        radius: '10600',  // Search within a 10km radius
         keyword: name,
         type: 'restaurant'
     };
 
     service.nearbySearch(request, function (results, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
-            let closestRestaurant = null;
-            let minDistance = Infinity;
+            let restaurants = [];
+            let restaurantDropdown = document.getElementById("restaurant");  // Get dropdown element
+
+            // Clear existing dropdown options
+            restaurantDropdown.innerHTML = `<option value="" selected disabled>Select a restaurant</option>`;
 
             for (var i = 0; i < results.length; i++) {
                 var distance = calculateDistance(new google.maps.LatLng(userLocation), results[i].geometry.location);
 
+                // Add distance to the restaurant object
+                results[i].distance = distance;
+                restaurants.push(results[i]);
+            }
+
+            // Sort by rating highest to lowest
+            restaurants.sort((a, b) => b.rating - a.rating);
+
+            // Populate the dropdown with the sorted restaurants
+            restaurants.forEach(function (restaurant) {
+                let option = document.createElement("option");
+                option.value = restaurant.place_id;  // Use restaurant place_id for dropdown value
+                option.text = `${restaurant.name} - ${restaurant.vicinity} (Rating: ${restaurant.rating})`;
+                restaurantDropdown.appendChild(option);  // Append the new option to the dropdown
+            });
+
+            // After sorting, update the markers on the map
+            let closestRestaurant = null;
+            let minDistance = Infinity;
+
+            for (let i = 0; i < restaurants.length; i++) {
+                var distance = restaurants[i].distance;
+
                 // Check if this restaurant is the closest one
                 if (distance < minDistance) {
                     minDistance = distance;
-                    closestRestaurant = results[i];
+                    closestRestaurant = restaurants[i];
                 }
 
-                createMarker(results[i]);
-
-                var restaurantData = {
-                    name: results[i].name,
-                    location: `${results[i].geometry.location.lat()},${results[i].geometry.location.lng()}`,
-                    rating: results[i].rating || 0,
-                    address: results[i].vicinity || 'Address not available'
-                };
-
-                // Send restaurant data to the backend
-                fetch('/FoodApp/save_restaurant/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': getCookie('csrftoken'),
-                    },
-                    body: JSON.stringify(restaurantData)
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Success:', data);
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
+                createMarker(restaurants[i]);
             }
 
             // Mark the closest restaurant with a different color
@@ -185,28 +214,10 @@ function searchRestaurant() {
                 createMarker(closestRestaurant, true);
             }
 
-            map.setCenter(results[0].geometry.location);
+            map.setCenter(restaurants[0].geometry.location);
         } else {
             console.log("No results found or error occurred. Status: " + status);
             alert("No restaurant found with the name '" + name + "'. Please try again.");
         }
     });
-
-    // Function to get a cookie by name
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Check if this cookie string begins with the name we want
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-
 }

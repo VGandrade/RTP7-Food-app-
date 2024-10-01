@@ -61,15 +61,25 @@
 | Make sure user funcitonalities are all finalized | Victor | <ul><li>[x] DONE</li></ul> 
 | Finalize password reset page and profile page | Dalton | <ul><li>[x] DONE</li></ul> 
 | Get a rough review and ratings system in place | Rachel | <ul><li>[x] DONE</li></ul> 
-| Pull restaurant information into database for the restaurant dropdown system | Ifaz | <ul><li>[] DONE</li></ul> 
+| Pull restaurant information into database for the restaurant dropdown system | Ifaz | <ul><li>[x] DONE</li></ul> 
 
 **End of week Summary:**
 | Person | Tasks Completed |
 | --- | --- |
 | Dalton | Finalized all the HTML for pages |
-| Ifaz |  |
+| Ifaz | Finished linking the restaurant to the database for restaurant dropdown |
 | Rachel | Finished funcitonality for review and ratings page |
 | Shlok | Finished adding information to the website |
 | Victor | Finalized all user functionalites |
+
+
+### Final Deliverables
+| Item | Link |
+| --- | --- |
+| Website link: | |
+| Github repo: | https://github.com/VGandrade/RTP7-Food-app-  |
+
+
+
 
 
