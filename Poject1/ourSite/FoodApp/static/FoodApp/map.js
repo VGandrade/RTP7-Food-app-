@@ -117,7 +117,12 @@ function searchRestaurant() {
     console.log("searching");
 
     var name = document.querySelector('input[name="name"]').value;
+    var sortBy = document.querySelector('select[name="sort"]').value;
+    var distanceFilter = document.querySelector('select[name="distance"]').value;
+
     console.log("Name: " + name);
+    console.log("Sort By: " + sortBy);
+    console.log("Distance Filter: " + distanceFilter);
 
     var mapOptions = {
         center: new google.maps.LatLng(33.7466, -84.3877),
@@ -136,48 +141,55 @@ function searchRestaurant() {
 
     service.nearbySearch(request, function (results, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
-            let closestRestaurant = null;
-            let minDistance = Infinity;
+            let restaurants = [];
+            let restaurantDropdown = document.getElementById("restaurant");  // Get dropdown element
+
+            // Clear existing dropdown options
+            restaurantDropdown.innerHTML = `<option value="" selected disabled>Select a restaurant</option>`;
 
             for (var i = 0; i < results.length; i++) {
                 var distance = calculateDistance(new google.maps.LatLng(userLocation), results[i].geometry.location);
+                
+                // Add distance to the restaurant object
+                results[i].distance = distance;
+                restaurants.push(results[i]);
+            }
+
+            // Sort the results based on the selected filters
+            if (sortBy === 'rating_high_first') {
+                restaurants.sort((a, b) => b.rating - a.rating);
+            } else if (sortBy === 'rating_low_first') {
+                restaurants.sort((a, b) => a.rating - b.rating);
+            }
+
+            if (distanceFilter === 'close_to_far') {
+                restaurants.sort((a, b) => a.distance - b.distance);
+            } else if (distanceFilter === 'far_to_close') {
+                restaurants.sort((a, b) => b.distance - a.distance);
+            }
+
+            // Populate the dropdown with the sorted restaurants
+            restaurants.forEach(function (restaurant) {
+                let option = document.createElement("option");
+                option.value = restaurant.name;  // You can use restaurant ID if available
+                option.text = `${restaurant.name} - ${restaurant.vicinity} (Rating: ${restaurant.rating})`;
+                restaurantDropdown.appendChild(option);  // Append the new option to the dropdown
+            });
+
+            // After sorting, update the markers on the map
+            let closestRestaurant = null;
+            let minDistance = Infinity;
+
+            for (let i = 0; i < restaurants.length; i++) {
+                var distance = restaurants[i].distance;
 
                 // Check if this restaurant is the closest one
                 if (distance < minDistance) {
                     minDistance = distance;
-                    closestRestaurant = results[i];
+                    closestRestaurant = restaurants[i];
                 }
 
-                createMarker(results[i]);
-
-                var restaurantData = {
-                    name: results[i].name,
-                    location: `${results[i].geometry.location.lat()},${results[i].geometry.location.lng()}`,
-                    rating: results[i].rating || 0,
-                    address: results[i].vicinity || 'Address not available'
-                };
-
-                // Send restaurant data to the backend
-                fetch('/FoodApp/save_restaurant/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': getCookie('csrftoken'),
-                    },
-                    body: JSON.stringify(restaurantData)
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Success:', data);
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
+                createMarker(restaurants[i]);
             }
 
             // Mark the closest restaurant with a different color
@@ -185,28 +197,10 @@ function searchRestaurant() {
                 createMarker(closestRestaurant, true);
             }
 
-            map.setCenter(results[0].geometry.location);
+            map.setCenter(restaurants[0].geometry.location);
         } else {
             console.log("No results found or error occurred. Status: " + status);
             alert("No restaurant found with the name '" + name + "'. Please try again.");
         }
     });
-
-    // Function to get a cookie by name
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Check if this cookie string begins with the name we want
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-
 }
