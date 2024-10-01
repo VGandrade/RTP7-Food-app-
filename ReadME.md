@@ -73,7 +73,7 @@
 | Victor | Finalized all user functionalites |
 
 
-**Deliverables**
+### Final Deliverables
 | Item | Link |
 | --- | --- |
 | Website link: | |
