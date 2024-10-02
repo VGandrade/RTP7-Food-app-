@@ -224,9 +224,6 @@ li {
             <a href="/FoodApp/users/">User</a>
             <a href="/FoodApp/users/create/">Register</a>
             <a href="{% url 'user_profile' usern=request.user.username %}">Profile</a>
-{#            <a href="/FoodApp/leave_review/">Leave Reviews</a>#}
-{#            <a href="/FoodApp/reviews/">Read Reviews</a>#}
-            <a href="/FoodApp/leave_and_list_reviews/">Reviews</a>
         </div>
     </div>
 
@@ -243,7 +240,7 @@ li {
             <div class="triangle-dropdown" onclick="toggleSortDropdown()">&#x25BC;</div> <!-- Dropdown trigger -->
             <!-- Sort Dropdown Menu -->
             <div class="sort-dropdown">
-                <form method="GET" action"{% url 'restaurant_list' %}">
+                <form method="GET">
                     <!-- Sort by Rating -->
                     <select name="sort" id="sort">
                         <option value="rating_high_first" {% if sort_by == 'rating_high_first' %}selected{% endif %}>Rating - High to Low</option>
@@ -255,6 +252,7 @@ li {
                         <option value="close_to_far" {% if sort_by == 'close_to_far' %}selected{% endif %}>Distance - High to Low</option>
                         <option value="far_to_close" {% if sort_by == 'far_to_close' %}selected{% endif %}>Distance - Low to High</option>
                     </select>
+                    <button type="submit">Apply</button>
                 </form>
             </div>
         </div>
@@ -276,12 +274,11 @@ li {
                     <option disabled>No restaurants found</option>
                 {% endfor %}
             </select>
-            <button type="submit" name="button" value="add_favorite">Add to Favourite restaurant</button>
-            <button type="submit" name="button" value="add_review">Add Review</button>
+            <button type="submit">Add to Favourite restaurant</button>
         </form>
         </div>
     </div>
-    <br>
+
     <div class="restaurant-dropdown-container">
         <label for="favorite">Favorite Restaurant:</label>
         <select id="favorite" name="favorite">
@@ -292,6 +289,7 @@ li {
             {% endfor %}
         </select>
     </div>
+
 
     <!-- Restaurant Details Display -->
     <div id="restaurant-details" style="display: none; margin-top: 20px;">

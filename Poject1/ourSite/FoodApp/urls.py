@@ -13,6 +13,6 @@ urlpatterns = [
     path('add_favorite/<str:username>/', views.add_favorite, name='add_favorite'),
     # path('leave_review/', views.leave_review, name='leave_review'),
     # path('reviews/', views.review_list, name='review_list'),
-    path('leave_and_list_reviews/', views.leave_and_list_reviews, name='leave_and_list_reviews'),
+    # path('leave_and_list_reviews/', views.leave_and_list_reviews, name='leave_and_list_reviews'),
 
 ]
