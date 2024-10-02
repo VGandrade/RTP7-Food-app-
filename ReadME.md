@@ -76,7 +76,7 @@
 ### Final Deliverables
 | Item | Link |
 | --- | --- |
-| Website link: | |
+| Website link: | https://rlee379.wixsite.com/my-site-2 |
 | Github repo: | https://github.com/VGandrade/RTP7-Food-app-  |
 
 
