@@ -8,8 +8,11 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from .forms import ReviewForm
 import json
-import requests
-from django.http import JsonResponse
+
+
+
+
+
 
 # Create your views here.
 def landing_page(request):
@@ -17,54 +20,47 @@ def landing_page(request):
 
 # Views for /FoodApp/restaurants
 def restaurant_list(request):
-    api_key = 'AIzaSyD4oBoretFq5JNK1Zzo2gxk5rSedxmtjiw'  # Replace with your actual Google Places API key
-    api_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
+    print("call restaurant_list")
 
     # Get query parameters from the request (user input)
     name_query = request.GET.get('name', '')  # Get the search term for name
+    cuisine_query = request.GET.get('cuisine', '')  # Get the search term for cuisine
     sort_by = request.GET.get('sort', 'rating_high_first')  # Default sort by rating
+    distance_to = request.GET.get('distance', 'distance_high_first')
 
-    params = {
-        'location': '33.7490,-84.3880',  # Atlanta, GA coordinates
-        'radius': 10600,  # Radius in meters (10.6km)
-        'type': 'restaurant',
-        'keyword': name_query,
-        'key': api_key
-    }
 
-    response = requests.get(api_url, params=params)
-    restaurant_data_from_api = response.json().get('results', [])
+    # Search capabilities
+    restaurants = Restaurant.objects.all()
 
-    # Save restaurant data to the database and gather the list of restaurants
-    all_restaurants = []
-    for restaurant in restaurant_data_from_api:
-        name = restaurant.get('name')
-        location = restaurant['geometry']['location']  # Use geometry for location
-        lat = location['lat']
-        lng = location['lng']
-        rating = restaurant.get('rating', 0)
+    # Search by name
+    if name_query:
+        restaurants = restaurants.filter(name__icontains=name_query)  # Search by name (case insensitive)
 
-        distance = 0  # Calculate distance if needed
+    # search by cuisine
+    if cuisine_query:
+        restaurants = restaurants.filter(cuisine__icontains=cuisine_query)  # Search by cuisine (case insensitive)
 
-        # Save restaurant to the database
-        save_restaurant_to_db(name, f"{lat},{lng}", rating, distance)
+    # Sort restaurants by rating (high to low and low to high)
+    if sort_by == 'rating_high_first':
+        restaurants = restaurants.order_by('-rating')  # Sort by rating (highest first)
+    elif sort_by == 'rating_low_first':
+        restaurants = restaurants.order_by('rating')  # Sort by rating (lowest first)
 
-        # Prepare restaurant data for map display
-        all_restaurants.append({
-            'name': name,
-            'location': {'lat': lat, 'lng': lng},
-            'rating': rating,
-            'distance': distance
-        })
+    # Sort restaurants by distance (high to low and low to high)
+    if distance_to == 'close_to_far':
+        restaurants = restaurants.order_by('-distance')  # Sort by rating (highest first)
+    elif distance_to == 'far_to_close':
+        restaurants = restaurants.order_by('distance')  # Sort by rating (lowest first)
 
     return render(request, 'map.html', {
-        'restaurants': all_restaurants,  # Pass the list of restaurants to the template
+        'restaurants': restaurants,
+        'name_query': name_query,
+        'cuisine_query': cuisine_query,
+        'sort_by': sort_by,
+        'distance_to': distance_to
     })
 
 
-def save_restaurant_to_db(name, location, rating, distance):
-    if not Restaurant.objects.filter(name=name, location=location).exists():
-        Restaurant.objects.create(name=name, location=location, rating=rating, distance=distance)
 
     #View for userss
 
@@ -161,13 +157,19 @@ def custom_password_reset(request):
     return render(request, 'custom_password_reset.html', {'form': form})
 
 def add_favorite(request, username):
-    user = User.objects.get(username=username)
-    restaurant = request.POST.get('restaurant')
-    print(len(user.favorites))
-    user.add_favorite(restaurant)
-    for x in range(len(user.favorites)):
-        print(user.favorites[x])
-    return redirect('restaurant_list')
+    if request.method == "POST":
+        if request.POST.get('button') == 'add_favorite':
+            user = User.objects.get(username=username)
+            restaurant = request.POST.get('restaurant')
+            if (restaurant) :
+                user.add_favorite(restaurant)
+            return redirect('restaurant_list')
+        if request.POST.get('button') == 'add_review':
+            restaurant = request.POST.get('restaurant')
+            print("restaurant to be review : " + restaurant);
+            new_restaurant = Restaurant(name=restaurant)
+            new_restaurant.save()
+            return redirect('leave_and_list_reviews')
 
 # @login_required
 # def leave_review(request):
@@ -231,29 +233,3 @@ def leave_and_list_reviews(request):
         'restaurants': restaurants,
     })
 
-def save_restaurant(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-
-        # Extract restaurant details from the request
-        name = data.get('name', 'Unknown Name')
-        location = data.get('location', 'Unknown Address')
-        rating = data.get('rating', 0.00)
-        distance = data.get('distance', 0.00)
-
-        # Check if restaurant already exists
-        restaurant, created = Restaurant.objects.get_or_create(
-            name=name,
-            defaults={'location': location, 'rating': rating, 'distance': distance}
-        )
-
-        # Update restaurant details if not created
-        if not created:
-            restaurant.location = location
-            restaurant.rating = rating
-            restaurant.distance = distance
-            restaurant.save()
-
-        return JsonResponse({'message': 'Restaurant saved successfully'}, status=200)
-    else:
-        return JsonResponse({'error': 'Invalid request method'}, status=400)

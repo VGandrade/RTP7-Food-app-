@@ -35,14 +35,14 @@ class User(AbstractUser):
     favorites = models.JSONField(default=list, blank=True)
 
     def add_favorite(self, restaurant):
-        # if restaurant not in self.favorites:
-        self.favorites.append(restaurant)
-        self.save()
+        if restaurant not in self.favorites:
+            self.favorites.append(restaurant)
+            self.save()
 
     def remove_favorite(self, restaurant):
-        # if restaurant in self.favorites:
-        self.favorites.remove(restaurant)
-        self.save()
+        if restaurant in self.favorites:
+            self.favorites.remove(restaurant)
+            self.save()
 
     def __str__(self):
         return self.username
@@ -76,6 +76,7 @@ class Review(models.Model):
 
     def __str__(self):
         return f"Review by {self.user.username} for {self.restaurant.name}"
+
 
 
 

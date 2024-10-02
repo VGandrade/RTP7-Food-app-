@@ -14,6 +14,5 @@ urlpatterns = [
     # path('leave_review/', views.leave_review, name='leave_review'),
     # path('reviews/', views.review_list, name='review_list'),
     path('leave_and_list_reviews/', views.leave_and_list_reviews, name='leave_and_list_reviews'),
-    path('save_restaurant/', views.save_restaurant, name='save_restaurant'),
 
 ]

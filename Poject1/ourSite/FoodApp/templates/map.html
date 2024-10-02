@@ -136,17 +136,11 @@ body {
 }
 
 /* Restaurant Dropdown Container */
-.restaurant-dropdown-container select {
-    width: 250px; /* Set a fixed width */
-    max-width: 100%; /* Ensure it doesn't overflow */
-    padding: 10px;
-    border-radius: 20px;
-    border: 1px solid #ccc;
-    background-color: white;
-    box-sizing: border-box; /* Ensure padding is included in the width */
+.restaurant-dropdown-container {
+    max-width: 1; /* Set a max-width to prevent overflow */
+    flex-shrink: 0;
     font-size: 18px;
-    margin-right: 20px; /* Add some margin if needed */
-    outline: none;
+    margin-right: 1; /* Add margin to create space from the right edge */
 }
 
 /* Sort and Cuisine Dropdown Menu Styling */
@@ -212,7 +206,7 @@ li {
     </style>
 </head>
 <body>
-    
+
     <!-- Header Section -->
     <div class="header">
         <div class="logo">
@@ -248,41 +242,46 @@ li {
             </form>
             <div class="triangle-dropdown" onclick="toggleSortDropdown()">&#x25BC;</div> <!-- Dropdown trigger -->
             <!-- Sort Dropdown Menu -->
-            <!-- Sort Dropdown Menu -->
-<div class="sort-dropdown">
-    <form method="GET">
-        <!-- Sort by Rating -->
-        <select name="sort" id="sort">
-            <option value="rating_high_first">Rating - High to Low</option>
-            <option value="rating_low_first">Rating - Low to High</option>
-        </select>
+            <div class="sort-dropdown">
+                <form method="GET" action"{% url 'restaurant_list' %}">
+                    <!-- Sort by Rating -->
+                    <select name="sort" id="sort">
+                        <option value="rating_high_first" {% if sort_by == 'rating_high_first' %}selected{% endif %}>Rating - High to Low</option>
+                        <option value="rating_low_first" {% if sort_by == 'rating_low_first' %}selected{% endif %}>Rating - Low to High</option>
+                    </select>
 
-        <!-- Filter by Distance -->
-        <select name="distance" id="distance">
-            <option value="close_to_far">Distance - Close to Far</option>
-            <option value="far_to_close">Distance - Far to Close</option>
-        </select>
-        <button type="button" onclick="applyFilters()">Apply</button>
-    </form>
-</div>
-
+                    <!-- Search by Cuisine -->
+                    <select name="distance" id="distance">
+                        <option value="close_to_far" {% if sort_by == 'close_to_far' %}selected{% endif %}>Distance - High to Low</option>
+                        <option value="far_to_close" {% if sort_by == 'far_to_close' %}selected{% endif %}>Distance - Low to High</option>
+                    </select>
+                </form>
+            </div>
         </div>
 
 
         <!-- Restaurant List -->
         <div class="restaurant-dropdown-container">
-            <form method="POST" action="{% url 'add_favorite' username=request.user.username %}">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <label for="restaurant">Select a Restaurant:</label>
-                <select id="restaurant" name="restaurant" onchange="showRestaurantDetails(this)">
-                    <option value="" selected disabled>Select a restaurant</option>
-                    <!-- The options will be dynamically added here by the JavaScript -->
-                </select>
-                <button type="submit">Add to Favourite restaurant</button>
-            </form>
+        <form method="POST" action="{% url 'add_favorite' username=request.user.username %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <label for="restaurant">Select a Restaurant:</label>
+            <select id="restaurant" name="restaurant" onchange="showRestaurantDetails(this)">
+                <option value="" selected disabled>Select a restaurant</option>
+                {% for restaurant in restaurants %}
+                    <option value="{{ restaurant.name }}">
+                        {{ restaurant.name }} - {{ restaurant.cuisine }} (Rating: {{ restaurant.rating }})
+                    </option>
+                {% empty %}
+                    <option disabled>No restaurants found</option>
+                {% endfor %}
+            </select>
+            <button type="submit" name="button" value="add_favorite">Add to Favourite restaurant</button>
+            <button type="submit" name="button" value="add_review">Add Review</button>
+        </form>
         </div>
     </div>
+    <br>
     <div class="restaurant-dropdown-container">
         <label for="favorite">Favorite Restaurant:</label>
         <select id="favorite" name="favorite">
@@ -323,13 +322,6 @@ li {
             const sortDropdown = document.querySelector('.sort-dropdown');
             sortDropdown.style.display = sortDropdown.style.display === 'block' ? 'none' : 'block';
         }
-        function applyFilters() {
-    // Prevent the default form submission
-    event.preventDefault();
-
-    // Call the searchRestaurant function to apply the filters
-    searchRestaurant();
-}
 
     </script>
 
