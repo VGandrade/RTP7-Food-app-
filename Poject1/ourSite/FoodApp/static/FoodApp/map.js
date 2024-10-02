@@ -147,15 +147,16 @@ function searchRestaurant() {
 
             for (var i = 0; i < results.length; i++) {
                 var distance = calculateDistance(new google.maps.LatLng(userLocation), results[i].geometry.location);
-                
+
                 // Add distance to the restaurant object
                 results[i].distance = distance;
                 restaurants.push(results[i]);
             }
 
-
-
-
+            // Sort restaurants by rating in descending order
+            restaurants.sort(function(a, b) {
+                return (b.rating || 0) - (a.rating || 0);
+            });
 
             // Populate the dropdown with the sorted restaurants
             restaurants.forEach(function (restaurant) {
@@ -192,4 +193,34 @@ function searchRestaurant() {
             alert("No restaurant found with the name '" + name + "'. Please try again.");
         }
     });
+    document.getElementById("sort-form").addEventListener("submit", function (e) {
+    e.preventDefault();  // Prevent page reload
+
+    var sortBy = document.querySelector('select[name="sort"]').value;
+
+    // Check if sorting by rating
+    if (sortBy === "rating-high-low") {
+        restaurants.sort(function(a, b) {
+                return (b.rating || 0) - (a.rating || 0);
+        });
+    } else if (sortBy === "rating-low-high") {
+        restaurants.sort(function(a, b) {
+                return (a.rating || 0) - (b.rating || 0);
+        });
+    }
+
+    // Clear and repopulate the dropdown with sorted restaurants
+    let restaurantDropdown = document.getElementById("restaurant");
+    restaurantDropdown.innerHTML = `<option value="" selected disabled>Select a restaurant</option>`;
+
+    restaurants.forEach(function (restaurant) {
+        let option = document.createElement("option");
+        option.value = restaurant.name;
+        option.text = `${restaurant.name} - ${restaurant.vicinity} (Rating: ${restaurant.rating})`;
+        restaurantDropdown.appendChild(option);
+    });
+
+    console.log("Restaurants sorted by " + sortBy);
+});
+
 }
