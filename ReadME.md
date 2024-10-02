@@ -73,7 +73,7 @@
 | Victor | Finalized all user functionalites |
 
 
-### Final Deliverables
+## Final Deliverables
 | Item | Link |
 | --- | --- |
 | Website link: | https://rlee379.wixsite.com/my-site-2 |
