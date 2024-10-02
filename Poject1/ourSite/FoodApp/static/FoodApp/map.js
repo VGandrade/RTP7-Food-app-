@@ -1,8 +1,6 @@
 var map; // Global variable for the map
 var service;
 var userLocation; // To store the user's current location
-var markers = []; // Store all markers
-var infoWindows = []; // Store all info windows
 
 // Function to calculate distance between two points using the Haversine formula
 function calculateDistance(loc1, loc2) {
@@ -17,14 +15,6 @@ function calculateDistance(loc1, loc2) {
     return R * 2 * Math.asin(Math.sqrt(a));
 }
 
-// Close all open info windows
-function closeAllInfoWindows() {
-    infoWindows.forEach(function (infoWindow) {
-        infoWindow.close();
-    });
-}
-
-// Function to create markers and add info windows
 function createMarker(place, isClosest = false) {
     // Check if geometry exists
     if (!place.geometry || !place.geometry.location) {
@@ -41,8 +31,7 @@ function createMarker(place, isClosest = false) {
         map: map,
         position: place.geometry.location,
         title: place.name,
-        icon: markerIcon,
-        place: place  // Store the entire place object, including place_id
+        icon: markerIcon // Change icon for the closest restaurant
     });
 
     var googleMapsLink = `https://www.google.com/maps/place/?q=place_id:${place.place_id}`;
@@ -61,18 +50,13 @@ function createMarker(place, isClosest = false) {
         content: infoWindowContent
     });
 
-    // Store marker and infoWindow for later use
-    markers.push({ marker: marker, infoWindow: infoWindow, placeId: place.place_id });
-    infoWindows.push(infoWindow);
-
     let isMouseOverMarker = false;
     let isMouseOverInfoWindow = false;
 
     // Open InfoWindow when hovering over the marker
     marker.addListener('mouseover', function () {
         isMouseOverMarker = true;
-        closeAllInfoWindows();  // Close any open info windows
-        infoWindow.open(map, marker);  // Open the new info window
+        infoWindow.open(map, marker);
     });
 
     // Close InfoWindow when mouse leaves both marker and InfoWindow
@@ -102,7 +86,6 @@ function createMarker(place, isClosest = false) {
     });
 }
 
-// Initialize the map
 function initMap() {
     var atlanta = { lat: 33.7490, lng: -84.3880 };
 
@@ -124,32 +107,20 @@ function initMap() {
         });
     }
 
-    // Handle search form submission
     document.getElementById("search-form").addEventListener("submit", (e) => {
         e.preventDefault();
         searchRestaurant();
     });
-
-    // Handle dropdown selection
-    document.getElementById("restaurant").addEventListener("change", function () {
-        let selectedPlaceId = this.value;
-        let selected = markers.find(m => m.placeId === selectedPlaceId);  // Find by place_id
-
-        if (selected) {
-            closeAllInfoWindows();  // Close all open info windows
-            selected.infoWindow.open(map, selected.marker);  // Open the selected info window
-            map.setCenter(selected.marker.getPosition());  // Center the map on the selected restaurant
-        }
-    });
 }
 
-// Search for restaurants
 function searchRestaurant() {
     console.log("searching");
 
     var name = document.querySelector('input[name="name"]').value;
-    var sortBy = 'rating_high_first';  // Sort by rating high by default
-    var distanceFilter = document.querySelector('select[name="distance"]').value;
+    var sortBy = document.querySelector('select[name="sort"]').value;
+
+    console.log("Name: " + name);
+    console.log("Sort By: " + sortBy);
 
     var mapOptions = {
         center: new google.maps.LatLng(33.7466, -84.3877),
@@ -161,7 +132,7 @@ function searchRestaurant() {
 
     var request = {
         location: new google.maps.LatLng(33.7490, -84.3880),  // Center search around Atlanta
-        radius: '10600',  // Search within a 10km radius
+        radius: '5000',  // Search within a 5km radius
         keyword: name,
         type: 'restaurant'
     };
@@ -176,19 +147,20 @@ function searchRestaurant() {
 
             for (var i = 0; i < results.length; i++) {
                 var distance = calculateDistance(new google.maps.LatLng(userLocation), results[i].geometry.location);
-
+                
                 // Add distance to the restaurant object
                 results[i].distance = distance;
                 restaurants.push(results[i]);
             }
 
-            // Sort by rating highest to lowest
-            restaurants.sort((a, b) => b.rating - a.rating);
+
+
+
 
             // Populate the dropdown with the sorted restaurants
             restaurants.forEach(function (restaurant) {
                 let option = document.createElement("option");
-                option.value = restaurant.place_id;  // Use restaurant place_id for dropdown value
+                option.value = restaurant.name;  // You can use restaurant ID if available
                 option.text = `${restaurant.name} - ${restaurant.vicinity} (Rating: ${restaurant.rating})`;
                 restaurantDropdown.appendChild(option);  // Append the new option to the dropdown
             });
